@@ -3,6 +3,9 @@ package client.gui.screens;
 import client.Client;
 import client.gui.ClientFrame;
 import java.awt.Color;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -38,11 +41,6 @@ public class SignUpScreen extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        errorLabel = new javax.swing.JLabel();
-        requiredUsernameLabel = new javax.swing.JLabel();
-        requiredPasswordLabel = new javax.swing.JLabel();
-        requiredFirstLabel = new javax.swing.JLabel();
-        requiredLastLabel = new javax.swing.JLabel();
         usernameField = new CustomTextField("Username", requiredUsernameLabel);
         signupButton = new javax.swing.JButton();
         signinLabel = new javax.swing.JLabel();
@@ -50,6 +48,13 @@ public class SignUpScreen extends javax.swing.JPanel {
         passwordField = new CustomPasswordField("Password", requiredPasswordLabel);
         firstNameField = new CustomTextField("First name", requiredFirstLabel);
         lastNameField = new CustomTextField("Last name", requiredLastLabel);
+        errorLabel = new javax.swing.JLabel();
+        requiredUsernameLabel = new javax.swing.JLabel();
+        requiredPasswordLabel = new javax.swing.JLabel();
+        requiredFirstLabel = new javax.swing.JLabel();
+        requiredLastLabel = new javax.swing.JLabel();
+        profilePictureLabel = new javax.swing.JLabel();
+        profilePictureNameLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(400, 550));
@@ -131,33 +136,59 @@ public class SignUpScreen extends javax.swing.JPanel {
         requiredLastLabel.setText("Required");
         requiredLastLabel.setPreferredSize(new java.awt.Dimension(40, 12));
 
+        profilePictureLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        profilePictureLabel.setForeground(new java.awt.Color(34, 156, 243));
+        profilePictureLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        profilePictureLabel.setText("Add profile picture");
+        profilePictureLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                profilePictureLabelMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                profilePictureLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                profilePictureLabelMouseExited(evt);
+            }
+        });
+
+        profilePictureNameLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        profilePictureNameLabel.setForeground(new java.awt.Color(80, 80, 80));
+        profilePictureNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        profilePictureNameLabel.setMaximumSize(new java.awt.Dimension(190, 23));
+        profilePictureNameLabel.setMinimumSize(new java.awt.Dimension(190, 23));
+        profilePictureNameLabel.setPreferredSize(new java.awt.Dimension(190, 23));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(102, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(logoLabel)
-                        .addGap(115, 115, 115))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(signinLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(98, 98, 98))))
+                .addContainerGap(115, Short.MAX_VALUE)
+                .addComponent(logoLabel)
+                .addGap(115, 115, 115))
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(requiredLastLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(requiredFirstLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(requiredPasswordLabel)
-                    .addComponent(requiredUsernameLabel)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(errorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(signupButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(usernameField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                        .addComponent(passwordField)
-                        .addComponent(firstNameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                        .addComponent(lastNameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(102, 102, 102)
+                        .addComponent(signinLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(profilePictureNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(profilePictureLabel))
+                            .addComponent(requiredLastLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(requiredFirstLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(requiredPasswordLabel)
+                            .addComponent(requiredUsernameLabel)
+                            .addComponent(errorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(usernameField)
+                            .addComponent(passwordField)
+                            .addComponent(firstNameField, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lastNameField, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(signupButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -183,11 +214,15 @@ public class SignUpScreen extends javax.swing.JPanel {
                 .addComponent(requiredLastLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(lastNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(profilePictureNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profilePictureLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addComponent(signupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(signinLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -232,19 +267,47 @@ public class SignUpScreen extends javax.swing.JPanel {
                     usernameField.getText(),
                     String.valueOf(passwordField.getPassword()),
                     firstNameField.getText(),
-                    lastNameField.getText()
+                    lastNameField.getText(),
+                    profilePicturePath
             );
-            if (response.equals("true")) {
+            if (response.equals("OK")) {
                 clientFrame.setActiveScreen(ScreenType.HOME);
                 errorLabel.setForeground(Color.white);
             } else {
+                errorLabel.setText(response);
                 errorLabel.setForeground(Color.red);
             }
         }
     }//GEN-LAST:event_signupButtonMouseClicked
 
+    private void profilePictureLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePictureLabelMouseClicked
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
+        fileChooser.showOpenDialog(this);
+        File file = fileChooser.getSelectedFile();
+        if (file != null) {
+            System.out.println(file.getName());
+            profilePictureNameLabel.setText(file.getName());
+            profilePicturePath = file.getAbsolutePath();
+        } else {
+            System.out.println("null");
+            profilePictureNameLabel.setText("");
+            profilePicturePath = "";
+        }
+    }//GEN-LAST:event_profilePictureLabelMouseClicked
+
+    private void profilePictureLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePictureLabelMouseEntered
+        profilePictureLabel.setForeground(new Color(34, 115, 242));
+    }//GEN-LAST:event_profilePictureLabelMouseEntered
+
+    private void profilePictureLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePictureLabelMouseExited
+        profilePictureLabel.setForeground(new Color(34, 156, 243));
+    }//GEN-LAST:event_profilePictureLabelMouseExited
+
     private ClientFrame clientFrame;
     private Client client;
+    
+    private String profilePicturePath = "";
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel errorLabel;
@@ -252,6 +315,8 @@ public class SignUpScreen extends javax.swing.JPanel {
     private javax.swing.JTextField lastNameField;
     private javax.swing.JLabel logoLabel;
     private javax.swing.JPasswordField passwordField;
+    private javax.swing.JLabel profilePictureLabel;
+    private javax.swing.JLabel profilePictureNameLabel;
     private javax.swing.JLabel requiredFirstLabel;
     private javax.swing.JLabel requiredLastLabel;
     private javax.swing.JLabel requiredPasswordLabel;

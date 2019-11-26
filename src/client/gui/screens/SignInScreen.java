@@ -180,7 +180,7 @@ public class SignInScreen extends javax.swing.JPanel {
 
         if (inputValid) {
             String response = client.signIn(usernameField.getText(), String.valueOf(passwordField.getPassword()));
-            if (response.equals("true")) {
+            if (response.equals("OK")) {
                 clientFrame.setActiveScreen(ScreenType.HOME);
                 errorLabel.setForeground(Color.white);
             } else {

@@ -1,127 +1,203 @@
 package client;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import common.FileHelper;
+import common.RequestType;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.nio.ByteBuffer;
-import javax.imageio.ImageIO;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.ImageIcon;
 
-public class Client extends Thread {
+public class Client {
 
-    private static final String SERVER_IP = "94.189.225.68";
-    private static final int SERVER_PORT = 4000;
+    private final String ROOT = System.getProperty("user.dir") + "\\tmp";
+    private final String PICTURES_INFO = ROOT + "\\profilePictureInformation.txt";
 
-    private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private ClientRequestHandler handler;
+
+    private ClientUserInformation user;
+
+    public ImageIcon defaultProfilePicture;
+    private Map<Integer, ImageIcon> profilePictures = new HashMap<>();
+    private Map<Integer, ClientUserInformation> users = new HashMap<>();
 
     public Client() {
+        try {
+            if (!Files.exists(Paths.get(ROOT))) {
+                initializeFileHierarchy();
+            } else {
+                loadProfilePictures();
+                defaultProfilePicture = new ImageIcon(getClass().getResource("/client/gui/res/default.png"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        handler = new ClientRequestHandler();
+    }
+
+    private void initializeFileHierarchy() throws IOException {
+        Files.createDirectory(Paths.get(ROOT));
+        Files.createFile(Paths.get(PICTURES_INFO));
+    }
+
+    private void loadProfilePictures() throws IOException {
+        List<String> users = Files.readAllLines(Paths.get(PICTURES_INFO));
+        for (String user : users) {
+            String[] info = user.split("#");
+            int userId = Integer.parseInt(info[0]);
+            String profilePicturePath = info[1];
+
+            ImageIcon profilePicture = new ImageIcon(profilePicturePath);
+            profilePictures.put(userId, profilePicture);
+        }
     }
 
     public void establishConnection() throws IOException {
-        socket = new Socket(SERVER_IP, SERVER_PORT);
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
+        handler.establishConnection();
+        handler.start();
+    }
+
+    private void saveProfilePictureInformation(int id, String path) {
+        try {
+            Files.write(Paths.get(PICTURES_INFO), (id + "#" + path + "\n").getBytes(), StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String signIn(String username, String password) {
-        String request = "SIGNIN#" + username + "#" + password;
-        out.println(request);
+        // send username and password
+        String request = RequestType.SIGNIN.name() + "#" + username + "#" + password;
 
-        String response = "";
+        int requestId = handler.addRequest(request);
+        String response = handler.getResponse(requestId);
+
+        // server returns error if username or password is incorrect
+        if (response.startsWith("ERROR")) {
+            return response.substring(5);
+        }
+
+        // otherwise, it returns basic information about user: user id, first name, last name and profile picture status
+        String info[] = response.split("#");
+        user = new ClientUserInformation(
+                Integer.parseInt(info[0]),
+                info[1],
+                info[2]
+        );
+        users.put(user.getId(), user);
+
+        if (profilePictures.containsKey(user.getId())) {    // profile picture is cached
+            user.setProfilePicture(profilePictures.get(user.getId()));
+        } else if (info[3].equals("1")) {   // user has uploaded a profile picture to the server
+            // get the profile picture from the server
+            String pathWithoutExtension = ROOT + "\\" + user.getId();
+            request = "GET_PROFILE_PICTURE#" + user.getId() + "#" + pathWithoutExtension;
+
+            requestId = handler.addRequest(request);
+            response = handler.getResponse(requestId);
+
+            if (response.startsWith("ERROR")) { // if any error occurs, just use the default profile picture
+                user.setProfilePicture(defaultProfilePicture);
+            } else {    // otherwise create new profile picture
+                user.setProfilePicture(new ImageIcon(response));
+            }
+
+            // save information about a picture - it is already cached in ROOT folder, just save its path
+            saveProfilePictureInformation(user.getId(), response);
+
+        } else {    // no profile picture uploaded, use the default profile picture
+            user.setProfilePicture(defaultProfilePicture);
+        }
+        profilePictures.put(user.getId(), user.getProfilePicture());
+
+        return "OK";
+    }
+
+    public String signUp(String username, String password, String firstName, String lastName, String profilePicturePath) {
+        int pictureLength = FileHelper.tryGetFileLengthInBytes(profilePicturePath);
+        if (pictureLength >= 64000) {
+            return "Image size is too big.";
+        }
+
+        // try to create a new account
+        String request = "SIGNUP#" + username + "#" + password + "#" + firstName + "#" + lastName + "#" + pictureLength;
+
+        int requestId = handler.addRequest(request);
+        String response = handler.getResponse(requestId);
+
+        // server returns error if username already exists
+        if (response.startsWith("ERROR")) {
+            return response.substring(5);
+        }
+
+        // otherwise, it returns basic information about user: user id, first name, last name and profile picture status
+        String info[] = response.split("#");
+        user = new ClientUserInformation(
+                Integer.parseInt(info[0]),
+                info[1],
+                info[2]
+        );
+        users.put(user.getId(), user);
+
+        if (pictureLength > 0 && info[3].equals("2")) { // user wants to upload a picture and server is expecting it
+            System.out.println("Uploading the picture...");
+
+            // upload profile picture to the server
+            request = "UPLOAD_IMAGE#" + profilePicturePath;
+            requestId = handler.addRequest(request);
+
+            System.out.println("Uploaded the picture.");
+
+            // cache profile picture in tmp folder for the next sign in
+            String tmpPath = ROOT + "\\" + user.getId() + FileHelper.getFileExtension(profilePicturePath);
+            FileHelper.copyFile(profilePicturePath, tmpPath);
+
+            saveProfilePictureInformation(user.getId(), tmpPath);
+
+            user.setProfilePicture(new ImageIcon(tmpPath));
+            System.out.println("Copied the picture.");
+        } else {
+            user.setProfilePicture(defaultProfilePicture);
+        }
+        profilePictures.put(user.getId(), user.getProfilePicture());
+
+        System.out.println("About to read data");
+
         try {
-            response = in.readLine();
+            readUserData();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return response;
+
+        return "OK";
     }
 
-    public String signUp(String username, String password, String firstName, String lastName) {
-        String request = "SIGNUP#" + username + "#" + password + "#" + firstName + "#" + lastName;
-        out.println(request);
-
-        String response = "";
-        try {
-            response = in.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return response;
-    }
-
-    public void sendImage() throws IOException {
-        /*OutputStream outputStream = socket.getOutputStream();
-        BufferedImage image = ImageIO.read(new File("C:\\Users\\uross\\Desktop\\test.jpg"));
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", byteArrayOutputStream);
-        
-        int size = byteArrayOutputStream.size();
-        out.println(String.valueOf(size));
-        System.out.println(size);
-        
-        outputStream.write(byteArrayOutputStream.toByteArray());
-        outputStream.flush();
-        System.out.println("Flushed: " + System.currentTimeMillis());*/
-
-        OutputStream os = socket.getOutputStream();
-        FileInputStream fis = new FileInputStream("C:\\Users\\uross\\Desktop\\test.jpg");
-        int length = (int) new File("C:\\Users\\uross\\Desktop\\test.jpg").length();
-        System.out.println("Length = " + length);
-
-        String request = "IMAGE#" + length;
-        out.println(request);
-        String response = in.readLine();
-
-        byte bytes[] = new byte[length];
-        fis.read(bytes, 0, length);
-        os.write(bytes, 0, length);
-        System.out.println("Sent");
-        fis.close();
-    }
-
-    @Override
-    public void run() {
-        System.out.println("Client started.");
-        try {
-            out.println("LOGIN#perica#pericacar");
-
-            System.out.println("waiting");
-            String message = in.readLine();
-            System.out.println("done: " + message);
-
-            socket.close();
-
-            /*while (true) {
-                sleep((int) (Math.random() * 2000));
-
-                String request = Math.random() < 0.9 ? "next" : "stop";
-                out.println(request);
-                System.out.println("Request: " + request);
-                System.out.println("Waiting for response...");
-
-                String message = in.readLine();
-                if (message.equals("stop")) {
-                    break;
-                }
-                System.out.println("Response: " + message);
-            }*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("Client stopped.");
-    }
-
-    public static void main(String[] args) {
-        new Client().start();
+    private void readUserData() throws IOException {
+//        System.out.println("Waiting for data...");
+//
+//        String basicInfo = in.readLine();
+//        System.out.println("Read: " + basicInfo);
+//        String info[] = basicInfo.split("#");
+//        int id = Integer.parseInt(info[1]);
+//        String firstName = info[2], lastName = info[3];
+//
+//        out.println("true");
+//
+//        String imageInfo = in.readLine();
+//        info = imageInfo.split("#");
+//        int length = Integer.parseInt(info[1]);
+//        String extension = info[2];
+//        String path = "C:\\Users\\uross\\Desktop\\" + id + extension;
+//
+//        System.out.println("Read: " + imageInfo);
+//
+//        if (length > 0) {
+//            System.out.println("Receiving profile picture...");
+//            FileHelper.receiveFile(socket, in, out, path, length);
+//        }
     }
 }

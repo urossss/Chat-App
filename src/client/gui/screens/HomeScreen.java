@@ -2,7 +2,9 @@ package client.gui.screens;
 
 import client.Client;
 import client.gui.ClientFrame;
+import java.awt.Image;
 import java.io.IOException;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -33,60 +35,61 @@ public class HomeScreen extends javax.swing.JPanel {
     private void initComponents() {
 
         logoLabel = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        logoLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(400, 550));
         setMinimumSize(new java.awt.Dimension(400, 550));
         setRequestFocusEnabled(false);
 
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/client/gui/res/logo.png"))); // NOI18N
+        ImageIcon originalIcon = new javax.swing.ImageIcon(getClass().getResource("/client/gui/res/logo.png"));
+        Image originalImage = originalIcon.getImage();
+        Image scaledImage = originalImage.getScaledInstance(100, 69, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        logoLabel.setBackground(new java.awt.Color(255, 255, 255));
+        logoLabel.setIcon(scaledIcon);
 
-        jButton1.setText("Send image");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jLabel1.setText("jLabel1");
+
+        logoLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        logoLabel1.setIcon(scaledIcon);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(115, 115, 115)
-                        .addComponent(logoLabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(jButton1)))
-                .addContainerGap(115, Short.MAX_VALUE))
+                        .addComponent(logoLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(logoLabel)
-                .addGap(75, 75, 75)
-                .addComponent(jButton1)
-                .addContainerGap(293, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(logoLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(380, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            client.sendImage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private ClientFrame clientFrame;
     private Client client;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel logoLabel;
+    private javax.swing.JLabel logoLabel1;
     // End of variables declaration//GEN-END:variables
 }
