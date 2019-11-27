@@ -39,6 +39,10 @@ public class Client {
         handler = new ClientRequestHandler();
     }
 
+    public ImageIcon getProfilePicture() {
+        return user.getProfilePicture();
+    }
+
     private void initializeFileHierarchy() throws IOException {
         Files.createDirectory(Paths.get(ROOT));
         Files.createFile(Paths.get(PICTURES_INFO));
@@ -148,13 +152,17 @@ public class Client {
 
             // upload profile picture to the server
             request = "UPLOAD_IMAGE#" + profilePicturePath;
-            requestId = handler.addRequest(request);
+            handler.addRequest(request);
 
             System.out.println("Uploaded the picture.");
 
             // cache profile picture in tmp folder for the next sign in
             String tmpPath = ROOT + "\\" + user.getId() + FileHelper.getFileExtension(profilePicturePath);
-            FileHelper.copyFile(profilePicturePath, tmpPath);
+            try {
+                FileHelper.cropImage(profilePicturePath, tmpPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             saveProfilePictureInformation(user.getId(), tmpPath);
 

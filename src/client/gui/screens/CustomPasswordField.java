@@ -1,21 +1,23 @@
 package client.gui.screens;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 
 public class CustomPasswordField extends JPasswordField {
-    
+
     private Color defaultTextColor = new Color(153, 153, 153);
     private Color textColor = new Color(80, 80, 80);
     private String defaultText;
     private boolean typing;
-    private JLabel designatedLabel;
-    
+    private List<JLabel> designatedLabels = new ArrayList<>();
+
     public CustomPasswordField(String _defaultText) {
         defaultText = _defaultText;
         setEchoChar('\u0000');
-        
+
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             @Override
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -41,12 +43,12 @@ public class CustomPasswordField extends JPasswordField {
                     setForeground(textColor);
                     setEchoChar('\u25cf');
                     typing = true;
-                    if (designatedLabel != null) {
+                    for (JLabel designatedLabel : designatedLabels) {
                         designatedLabel.setForeground(Color.white);
                     }
                 }
             }
-            
+
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 String password = String.valueOf(getPassword());
@@ -62,12 +64,11 @@ public class CustomPasswordField extends JPasswordField {
             }
         });
     }
-    
-    public CustomPasswordField(String _defaultText, JLabel _designatedLabel) {
-        this(_defaultText);
-        designatedLabel = _designatedLabel;
+
+    public void addDesignatedLabel(JLabel label) {
+        designatedLabels.add(label);
     }
-    
+
     public boolean isInputValid() {
         return typing;
     }

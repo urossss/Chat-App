@@ -25,6 +25,14 @@ public class SignInScreen extends javax.swing.JPanel {
         requiredUsernameLabel.setForeground(Color.white);
         requiredPasswordLabel.setForeground(Color.white);
         errorLabel.setForeground(Color.white);
+
+        CustomTextField username = (CustomTextField) usernameField;
+        username.addDesignatedLabel(requiredUsernameLabel);
+        username.addDesignatedLabel(errorLabel);
+        
+        CustomPasswordField password = (CustomPasswordField) passwordField;
+        password.addDesignatedLabel(requiredPasswordLabel);
+        password.addDesignatedLabel(errorLabel);
     }
 
     /**
@@ -37,10 +45,10 @@ public class SignInScreen extends javax.swing.JPanel {
     private void initComponents() {
 
         logoLabel = new javax.swing.JLabel();
-        usernameField = new CustomTextField("Username", requiredUsernameLabel);
+        usernameField = new CustomTextField("Username");
         signinButton = new javax.swing.JButton();
         signupLabel = new javax.swing.JLabel();
-        passwordField = new CustomPasswordField("Password", requiredPasswordLabel);
+        passwordField = new CustomPasswordField("Password");
         requiredUsernameLabel = new javax.swing.JLabel();
         requiredPasswordLabel = new javax.swing.JLabel();
         errorLabel = new javax.swing.JLabel();

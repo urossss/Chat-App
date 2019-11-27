@@ -30,6 +30,22 @@ public class SignUpScreen extends javax.swing.JPanel {
         requiredPasswordLabel.setForeground(Color.white);
         requiredUsernameLabel.setForeground(Color.white);
         errorLabel.setForeground(Color.white);
+
+        CustomTextField textField = (CustomTextField) usernameField;
+        textField.addDesignatedLabel(requiredUsernameLabel);
+        textField.addDesignatedLabel(errorLabel);
+        
+        textField = (CustomTextField) firstNameField;
+        textField.addDesignatedLabel(requiredFirstLabel);
+        textField.addDesignatedLabel(errorLabel);
+        
+        textField = (CustomTextField) lastNameField;
+        textField.addDesignatedLabel(requiredLastLabel);
+        textField.addDesignatedLabel(errorLabel);
+        
+        CustomPasswordField password = (CustomPasswordField) passwordField;
+        password.addDesignatedLabel(requiredPasswordLabel);
+        password.addDesignatedLabel(errorLabel);
     }
 
     /**
@@ -41,13 +57,13 @@ public class SignUpScreen extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        usernameField = new CustomTextField("Username", requiredUsernameLabel);
+        usernameField = new CustomTextField("Username");
         signupButton = new javax.swing.JButton();
         signinLabel = new javax.swing.JLabel();
         logoLabel = new javax.swing.JLabel();
-        passwordField = new CustomPasswordField("Password", requiredPasswordLabel);
-        firstNameField = new CustomTextField("First name", requiredFirstLabel);
-        lastNameField = new CustomTextField("Last name", requiredLastLabel);
+        passwordField = new CustomPasswordField("Password");
+        firstNameField = new CustomTextField("First name");
+        lastNameField = new CustomTextField("Last name");
         errorLabel = new javax.swing.JLabel();
         requiredUsernameLabel = new javax.swing.JLabel();
         requiredPasswordLabel = new javax.swing.JLabel();

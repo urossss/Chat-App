@@ -14,6 +14,7 @@ public class ClientFrame extends JFrame {
     private JPanel logInScreen, signUpScreen;
 
     private Client client = new Client();
+    private HomeScreen homeScreen;
 
     public ClientFrame() {
         super("Chat");
@@ -54,7 +55,9 @@ public class ClientFrame extends JFrame {
 
         content.add(new LoadingScreen(this, client), ScreenType.LOADING.name());
         content.add(new LoadingErrorScreen(this), ScreenType.LOADING_ERROR.name());
-        content.add(new HomeScreen(this, client), ScreenType.HOME.name());
+
+        homeScreen = new HomeScreen(this, client);
+        content.add(homeScreen, ScreenType.HOME.name());
 
         setActiveScreen(ScreenType.LOADING);
     }
@@ -66,6 +69,10 @@ public class ClientFrame extends JFrame {
     public void setActiveScreen(ScreenType type) {
         CardLayout layout = (CardLayout) content.getLayout();
         layout.show(content, type.name());
+
+        if (type == ScreenType.HOME) {
+            homeScreen.setIcon();
+        }
     }
 
     public static void main(String[] args) {

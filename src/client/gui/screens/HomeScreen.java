@@ -3,6 +3,7 @@ package client.gui.screens;
 import client.Client;
 import client.gui.ClientFrame;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.swing.ImageIcon;
 
@@ -25,6 +26,14 @@ public class HomeScreen extends javax.swing.JPanel {
         client = _client;
     }
 
+    public void setIcon() {
+        ImageIcon originalIcon = client.getProfilePicture();
+        Image originalImage = originalIcon.getImage();
+        Image scaledImage = originalImage.getScaledInstance(profilePictureLabel.getWidth(), profilePictureLabel.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        profilePictureLabel.setIcon(scaledIcon);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,53 +43,31 @@ public class HomeScreen extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        logoLabel = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        logoLabel1 = new javax.swing.JLabel();
+        profilePictureLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(400, 550));
         setMinimumSize(new java.awt.Dimension(400, 550));
         setRequestFocusEnabled(false);
 
-        ImageIcon originalIcon = new javax.swing.ImageIcon(getClass().getResource("/client/gui/res/logo.png"));
-        Image originalImage = originalIcon.getImage();
-        Image scaledImage = originalImage.getScaledInstance(100, 69, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-        logoLabel.setBackground(new java.awt.Color(255, 255, 255));
-        logoLabel.setIcon(scaledIcon);
-
-        jLabel1.setText("jLabel1");
-
-        logoLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        logoLabel1.setIcon(scaledIcon);
+        profilePictureLabel.setBackground(new java.awt.Color(255, 255, 255));
+        profilePictureLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(logoLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGap(100, 100, 100)
+                .addComponent(profilePictureLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(logoLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(380, Short.MAX_VALUE))
+                .addGap(164, 164, 164)
+                .addComponent(profilePictureLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(188, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -88,8 +75,6 @@ public class HomeScreen extends javax.swing.JPanel {
     private Client client;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel logoLabel;
-    private javax.swing.JLabel logoLabel1;
+    private javax.swing.JLabel profilePictureLabel;
     // End of variables declaration//GEN-END:variables
 }

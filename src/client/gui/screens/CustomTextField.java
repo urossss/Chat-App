@@ -1,6 +1,8 @@
 package client.gui.screens;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -10,7 +12,7 @@ public class CustomTextField extends JTextField {
     private Color textColor = new Color(80, 80, 80);
     private String defaultText;
     private boolean typing;
-    private JLabel designatedLabel;
+    private List<JLabel> designatedLabels = new ArrayList<>();
 
     public CustomTextField(String _defaultText) {
         defaultText = _defaultText;
@@ -39,7 +41,7 @@ public class CustomTextField extends JTextField {
                     setText("");
                     setForeground(textColor);
                     typing = true;
-                    if (designatedLabel != null) {
+                    for (JLabel designatedLabel : designatedLabels) {
                         designatedLabel.setForeground(Color.white);
                     }
                 }
@@ -59,9 +61,8 @@ public class CustomTextField extends JTextField {
         });
     }
 
-    public CustomTextField(String _defaultText, JLabel _designatedLabel) {
-        this(_defaultText);
-        designatedLabel = _designatedLabel;
+    public void addDesignatedLabel(JLabel label) {
+        designatedLabels.add(label);
     }
 
     public boolean isInputValid() {
