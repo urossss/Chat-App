@@ -2,6 +2,22 @@ package client.gui.screens;
 
 import client.Client;
 import client.gui.ClientFrame;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.ScrollPaneLayout;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.Border;
 
 /**
  *
@@ -20,6 +36,33 @@ public class HomeScreen extends javax.swing.JPanel {
 
         clientFrame = _clientFrame;
         client = _client;
+
+        chatsPanel.setLayout(new BoxLayout(chatsPanel, BoxLayout.Y_AXIS));
+        for (int i = 0; i < 5; i++) {
+//            JPanel panel = new JPanel();
+//            panel.setBackground(Color.red);
+//            // panel.setBounds(0, 0, 100, 100);
+//            panel.setPreferredSize(new Dimension(100, 100));
+//            panel.setMinimumSize(new Dimension(100, 100));
+//            panel.setMaximumSize(new Dimension(100, 100));
+//            chatsPane.add(panel);
+            JLabel label = new JLabel("" + i);
+            label.setPreferredSize(new Dimension(60, 60));
+            label.setMinimumSize(new Dimension(60, 60));
+            label.setMaximumSize(new Dimension(60, 60));
+            label.setForeground(Color.red);
+            label.setBorder(BorderFactory.createLineBorder(Color.black));
+
+            chatsPanel.add(label);
+        }
+        chatsPanel.revalidate();
+        chatsPanel.repaint();
+
+        chatsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        chatsScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+
+        revalidate();
+        repaint();
     }
 
     public void setIcon() {
@@ -38,6 +81,9 @@ public class HomeScreen extends javax.swing.JPanel {
     private void initComponents() {
 
         profilePicturePanel = new ProfilePicturePanel();
+        jLabel1 = new javax.swing.JLabel();
+        chatsScrollPane = new javax.swing.JScrollPane();
+        chatsPanel = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(400, 550));
@@ -48,28 +94,60 @@ public class HomeScreen extends javax.swing.JPanel {
         profilePicturePanel.setLayout(profilePicturePanelLayout);
         profilePicturePanelLayout.setHorizontalGroup(
             profilePicturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
+            .addGap(0, 50, Short.MAX_VALUE)
         );
         profilePicturePanelLayout.setVerticalGroup(
             profilePicturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setText("Chats");
+
+        chatsScrollPane.setHorizontalScrollBar(null);
+
+        chatsPanel.setBackground(new java.awt.Color(255, 255, 255));
+        chatsPanel.setMaximumSize(new java.awt.Dimension(361, 467));
+        chatsPanel.setMinimumSize(new java.awt.Dimension(361, 467));
+
+        javax.swing.GroupLayout chatsPanelLayout = new javax.swing.GroupLayout(chatsPanel);
+        chatsPanel.setLayout(chatsPanelLayout);
+        chatsPanelLayout.setHorizontalGroup(
+            chatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 378, Short.MAX_VALUE)
+        );
+        chatsPanelLayout.setVerticalGroup(
+            chatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 473, Short.MAX_VALUE)
+        );
+
+        chatsScrollPane.setViewportView(chatsPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(75, 75, 75)
-                .addComponent(profilePicturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chatsScrollPane)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(profilePicturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(profilePicturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(250, Short.MAX_VALUE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(profilePicturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(chatsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -77,6 +155,9 @@ public class HomeScreen extends javax.swing.JPanel {
     private Client client;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel chatsPanel;
+    private javax.swing.JScrollPane chatsScrollPane;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel profilePicturePanel;
     // End of variables declaration//GEN-END:variables
 }

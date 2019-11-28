@@ -43,9 +43,9 @@ public class CustomPasswordField extends JPasswordField {
                     setForeground(textColor);
                     setEchoChar('\u25cf');
                     typing = true;
-                    for (JLabel designatedLabel : designatedLabels) {
-                        designatedLabel.setForeground(Color.white);
-                    }
+                }
+                for (JLabel designatedLabel : designatedLabels) {
+                    designatedLabel.setForeground(Color.white);
                 }
             }
 

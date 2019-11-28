@@ -3,6 +3,7 @@ package client.gui.screens;
 import client.Client;
 import client.gui.ClientFrame;
 import java.awt.Color;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -22,6 +23,10 @@ public class SignInScreen extends javax.swing.JPanel {
         clientFrame = _clientFrame;
         client = _client;
 
+        signinButton.setContentAreaFilled(false);
+        signinButton.setOpaque(true);
+        signinButton.setBorder(new LineBorder(new Color(153, 153, 153)));
+
         requiredUsernameLabel.setForeground(Color.white);
         requiredPasswordLabel.setForeground(Color.white);
         errorLabel.setForeground(Color.white);
@@ -29,7 +34,7 @@ public class SignInScreen extends javax.swing.JPanel {
         CustomTextField username = (CustomTextField) usernameField;
         username.addDesignatedLabel(requiredUsernameLabel);
         username.addDesignatedLabel(errorLabel);
-        
+
         CustomPasswordField password = (CustomPasswordField) passwordField;
         password.addDesignatedLabel(requiredPasswordLabel);
         password.addDesignatedLabel(errorLabel);
@@ -69,6 +74,15 @@ public class SignInScreen extends javax.swing.JPanel {
         signinButton.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         signinButton.setForeground(new java.awt.Color(255, 255, 255));
         signinButton.setText("Sign In");
+        signinButton.setFocusPainted(false);
+        signinButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                signinButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                signinButtonMouseExited(evt);
+            }
+        });
         signinButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 signinButtonActionPerformed(evt);
@@ -196,6 +210,14 @@ public class SignInScreen extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_signinButtonActionPerformed
+
+    private void signinButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signinButtonMouseEntered
+        signinButton.setBackground(new Color(104, 185, 243));
+    }//GEN-LAST:event_signinButtonMouseEntered
+
+    private void signinButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signinButtonMouseExited
+        signinButton.setBackground(new Color(34, 156, 243));
+    }//GEN-LAST:event_signinButtonMouseExited
 
     private ClientFrame clientFrame;
     private Client client;

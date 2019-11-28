@@ -5,6 +5,10 @@ import client.gui.ClientFrame;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -25,6 +29,10 @@ public class SignUpScreen extends javax.swing.JPanel {
         clientFrame = _clientFrame;
         client = _client;
 
+        signupButton.setContentAreaFilled(false);
+        signupButton.setOpaque(true);
+        signupButton.setBorder(new LineBorder(new Color(153, 153, 153)));
+
         requiredFirstLabel.setForeground(Color.white);
         requiredLastLabel.setForeground(Color.white);
         requiredPasswordLabel.setForeground(Color.white);
@@ -34,15 +42,15 @@ public class SignUpScreen extends javax.swing.JPanel {
         CustomTextField textField = (CustomTextField) usernameField;
         textField.addDesignatedLabel(requiredUsernameLabel);
         textField.addDesignatedLabel(errorLabel);
-        
+
         textField = (CustomTextField) firstNameField;
         textField.addDesignatedLabel(requiredFirstLabel);
         textField.addDesignatedLabel(errorLabel);
-        
+
         textField = (CustomTextField) lastNameField;
         textField.addDesignatedLabel(requiredLastLabel);
         textField.addDesignatedLabel(errorLabel);
-        
+
         CustomPasswordField password = (CustomPasswordField) passwordField;
         password.addDesignatedLabel(requiredPasswordLabel);
         password.addDesignatedLabel(errorLabel);
@@ -85,6 +93,15 @@ public class SignUpScreen extends javax.swing.JPanel {
         signupButton.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         signupButton.setForeground(new java.awt.Color(255, 255, 255));
         signupButton.setText("Sign Up");
+        signupButton.setFocusPainted(false);
+        signupButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                signupButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                signupButtonMouseExited(evt);
+            }
+        });
         signupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 signupButtonActionPerformed(evt);
@@ -320,9 +337,17 @@ public class SignUpScreen extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_signupButtonActionPerformed
 
+    private void signupButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupButtonMouseEntered
+        signupButton.setBackground(new Color(104,185,243));
+    }//GEN-LAST:event_signupButtonMouseEntered
+
+    private void signupButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupButtonMouseExited
+        signupButton.setBackground(new Color(34, 156, 243));
+    }//GEN-LAST:event_signupButtonMouseExited
+
     private ClientFrame clientFrame;
     private Client client;
-    
+
     private String profilePicturePath = "";
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

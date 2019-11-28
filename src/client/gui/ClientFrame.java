@@ -7,6 +7,9 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class ClientFrame extends JFrame {
 
@@ -18,6 +21,14 @@ public class ClientFrame extends JFrame {
 
     public ClientFrame() {
         super("Chat");
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            SwingUtilities.updateComponentTreeUI(this);
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
 
         setSize(400, 550);
         setResizable(false);
@@ -70,7 +81,7 @@ public class ClientFrame extends JFrame {
         if (type == ScreenType.HOME) {
             homeScreen.setIcon();
         }
-        
+
         CardLayout layout = (CardLayout) content.getLayout();
         layout.show(content, type.name());
     }
