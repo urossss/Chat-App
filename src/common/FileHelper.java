@@ -26,11 +26,13 @@ public class FileHelper {
 
         String request = "UPLOAD_IMAGE#" + length + "#" + extension;
         out.println(request);
+        out.flush();
         in.readLine();
 
         byte bytes[] = new byte[length];
         fis.read(bytes, 0, length);
         os.write(bytes, 0, length);
+        os.flush();
         System.out.println("Sent");
         fis.close();
     }
@@ -47,14 +49,14 @@ public class FileHelper {
     }
 
     /**
-     * Crops original image so that only central square part is left.
-     * The width and height of the output image are equal to minimum of
-     * width and height of original image. The smaller dimension stays
-     * the same, but from the bigger one only central part is saved.
-     * 
+     * Crops original image so that only central square part is left. The width
+     * and height of the output image are equal to minimum of width and height
+     * of original image. The smaller dimension stays the same, but from the
+     * bigger one only central part is saved.
+     *
      * @param sourcePath - original image path
      * @param targetPath - cropped image desired path
-     * 
+     *
      * @throws IOException
      */
     public static void cropImage(String sourcePath, String targetPath) throws IOException {

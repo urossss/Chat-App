@@ -91,6 +91,7 @@ public class ClientRequestHandler extends Thread {
                     case SIGNIN:
                     case SIGNUP:
                         out.println(requestMessage);
+                        out.flush();
                         response = in.readLine();
                         synchronized (responses) {
                             responses.put(requestId, response);
@@ -102,8 +103,9 @@ public class ClientRequestHandler extends Thread {
                         break;
                     case GET_PROFILE_PICTURE:
                         String parts[] = requestContent.split("#");
-                        
+
                         out.println(requestTypeName + "#" + parts[0]);
+                        out.flush();
                         response = in.readLine();
 
                         if (!response.startsWith("ERROR")) {
@@ -113,8 +115,9 @@ public class ClientRequestHandler extends Thread {
                             String profilePicturePath = parts[1] + extension;
 
                             out.println("OK");
+                            out.flush();
                             FileHelper.receiveFile(socket, in, out, profilePicturePath, length);
-                            
+
                             response = profilePicturePath;
                         }
 

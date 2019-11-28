@@ -2,9 +2,7 @@
 *
 
 # Don't ignore folders
-!*/
+!src/
 
 # Don't ignore .gitignore and *.java files
 !.gitignore
-!*.java
-!*.form
