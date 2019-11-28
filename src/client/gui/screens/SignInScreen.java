@@ -69,9 +69,9 @@ public class SignInScreen extends javax.swing.JPanel {
         signinButton.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         signinButton.setForeground(new java.awt.Color(255, 255, 255));
         signinButton.setText("Sign In");
-        signinButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                signinButtonMouseClicked(evt);
+        signinButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                signinButtonActionPerformed(evt);
             }
         });
 
@@ -172,7 +172,7 @@ public class SignInScreen extends javax.swing.JPanel {
         clientFrame.setActiveScreen(ScreenType.SIGNUP);
     }//GEN-LAST:event_signupLabelMouseClicked
 
-    private void signinButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signinButtonMouseClicked
+    private void signinButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signinButtonActionPerformed
         boolean inputValid = true;
         CustomTextField customUsernameField = (CustomTextField) usernameField;
         if (!customUsernameField.isInputValid()) {
@@ -195,7 +195,7 @@ public class SignInScreen extends javax.swing.JPanel {
                 errorLabel.setForeground(Color.red);
             }
         }
-    }//GEN-LAST:event_signinButtonMouseClicked
+    }//GEN-LAST:event_signinButtonActionPerformed
 
     private ClientFrame clientFrame;
     private Client client;

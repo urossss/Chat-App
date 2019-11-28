@@ -85,9 +85,9 @@ public class SignUpScreen extends javax.swing.JPanel {
         signupButton.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         signupButton.setForeground(new java.awt.Color(255, 255, 255));
         signupButton.setText("Sign Up");
-        signupButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                signupButtonMouseClicked(evt);
+        signupButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                signupButtonActionPerformed(evt);
             }
         });
 
@@ -254,7 +254,31 @@ public class SignUpScreen extends javax.swing.JPanel {
         clientFrame.setActiveScreen(ScreenType.SIGNIN);
     }//GEN-LAST:event_signinLabelMouseClicked
 
-    private void signupButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupButtonMouseClicked
+    private void profilePictureLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePictureLabelMouseClicked
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
+        fileChooser.showOpenDialog(this);
+        File file = fileChooser.getSelectedFile();
+        if (file != null) {
+            System.out.println(file.getName());
+            profilePictureNameLabel.setText(file.getName());
+            profilePicturePath = file.getAbsolutePath();
+        } else {
+            System.out.println("null");
+            profilePictureNameLabel.setText("");
+            profilePicturePath = "";
+        }
+    }//GEN-LAST:event_profilePictureLabelMouseClicked
+
+    private void profilePictureLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePictureLabelMouseEntered
+        profilePictureLabel.setForeground(new Color(34, 115, 242));
+    }//GEN-LAST:event_profilePictureLabelMouseEntered
+
+    private void profilePictureLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePictureLabelMouseExited
+        profilePictureLabel.setForeground(new Color(34, 156, 243));
+    }//GEN-LAST:event_profilePictureLabelMouseExited
+
+    private void signupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupButtonActionPerformed
         boolean inputValid = true;
         CustomTextField customUsernameField = (CustomTextField) usernameField;
         if (!customUsernameField.isInputValid()) {
@@ -294,31 +318,7 @@ public class SignUpScreen extends javax.swing.JPanel {
                 errorLabel.setForeground(Color.red);
             }
         }
-    }//GEN-LAST:event_signupButtonMouseClicked
-
-    private void profilePictureLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePictureLabelMouseClicked
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
-        fileChooser.showOpenDialog(this);
-        File file = fileChooser.getSelectedFile();
-        if (file != null) {
-            System.out.println(file.getName());
-            profilePictureNameLabel.setText(file.getName());
-            profilePicturePath = file.getAbsolutePath();
-        } else {
-            System.out.println("null");
-            profilePictureNameLabel.setText("");
-            profilePicturePath = "";
-        }
-    }//GEN-LAST:event_profilePictureLabelMouseClicked
-
-    private void profilePictureLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePictureLabelMouseEntered
-        profilePictureLabel.setForeground(new Color(34, 115, 242));
-    }//GEN-LAST:event_profilePictureLabelMouseEntered
-
-    private void profilePictureLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePictureLabelMouseExited
-        profilePictureLabel.setForeground(new Color(34, 156, 243));
-    }//GEN-LAST:event_profilePictureLabelMouseExited
+    }//GEN-LAST:event_signupButtonActionPerformed
 
     private ClientFrame clientFrame;
     private Client client;

@@ -2,10 +2,6 @@ package client.gui.screens;
 
 import client.Client;
 import client.gui.ClientFrame;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -27,11 +23,9 @@ public class HomeScreen extends javax.swing.JPanel {
     }
 
     public void setIcon() {
-        ImageIcon originalIcon = client.getProfilePicture();
-        Image originalImage = originalIcon.getImage();
-        Image scaledImage = originalImage.getScaledInstance(profilePictureLabel.getWidth(), profilePictureLabel.getHeight(), Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-        profilePictureLabel.setIcon(scaledIcon);
+        ProfilePicturePanel ppp = (ProfilePicturePanel) profilePicturePanel;
+        ppp.setImage(client.getProfilePicture());
+        ppp.repaint();
     }
 
     /**
@@ -43,15 +37,23 @@ public class HomeScreen extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        profilePictureLabel = new javax.swing.JLabel();
+        profilePicturePanel = new ProfilePicturePanel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(400, 550));
         setMinimumSize(new java.awt.Dimension(400, 550));
         setRequestFocusEnabled(false);
 
-        profilePictureLabel.setBackground(new java.awt.Color(255, 255, 255));
-        profilePictureLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        javax.swing.GroupLayout profilePicturePanelLayout = new javax.swing.GroupLayout(profilePicturePanel);
+        profilePicturePanel.setLayout(profilePicturePanelLayout);
+        profilePicturePanelLayout.setHorizontalGroup(
+            profilePicturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+        profilePicturePanelLayout.setVerticalGroup(
+            profilePicturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 199, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -59,15 +61,15 @@ public class HomeScreen extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(100, 100, 100)
-                .addComponent(profilePictureLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(profilePicturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(164, 164, 164)
-                .addComponent(profilePictureLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(188, Short.MAX_VALUE))
+                .addGap(50, 50, 50)
+                .addComponent(profilePicturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(301, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -75,6 +77,6 @@ public class HomeScreen extends javax.swing.JPanel {
     private Client client;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel profilePictureLabel;
+    private javax.swing.JPanel profilePicturePanel;
     // End of variables declaration//GEN-END:variables
 }

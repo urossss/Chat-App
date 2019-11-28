@@ -67,12 +67,12 @@ public class ClientFrame extends JFrame {
     }
 
     public void setActiveScreen(ScreenType type) {
-        CardLayout layout = (CardLayout) content.getLayout();
-        layout.show(content, type.name());
-
         if (type == ScreenType.HOME) {
             homeScreen.setIcon();
         }
+        
+        CardLayout layout = (CardLayout) content.getLayout();
+        layout.show(content, type.name());
     }
 
     public static void main(String[] args) {
