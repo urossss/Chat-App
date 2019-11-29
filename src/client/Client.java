@@ -18,11 +18,11 @@ public class Client {
 
     private ClientRequestHandler handler;
 
-    private ClientUserInformation user;
+    private UserInformation user;
 
     public ImageIcon defaultProfilePicture;
     private Map<Integer, ImageIcon> profilePictures = new HashMap<>();
-    private Map<Integer, ClientUserInformation> users = new HashMap<>();
+    private Map<Integer, UserInformation> users = new HashMap<>();
 
     public Client() {
         try {
@@ -37,6 +37,10 @@ public class Client {
         }
 
         handler = new ClientRequestHandler();
+    }
+    
+    public UserInformation getUser() {
+        return user;
     }
 
     public ImageIcon getProfilePicture() {
@@ -87,7 +91,7 @@ public class Client {
 
         // otherwise, it returns basic information about user: user id, first name, last name and profile picture status
         String info[] = response.split("#");
-        user = new ClientUserInformation(
+        user = new UserInformation(
                 Integer.parseInt(info[0]),
                 info[1],
                 info[2]
@@ -140,7 +144,7 @@ public class Client {
 
         // otherwise, it returns basic information about user: user id, first name, last name and profile picture status
         String info[] = response.split("#");
-        user = new ClientUserInformation(
+        user = new UserInformation(
                 Integer.parseInt(info[0]),
                 info[1],
                 info[2]

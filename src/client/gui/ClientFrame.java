@@ -14,9 +14,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class ClientFrame extends JFrame {
 
     private JPanel content;
-    private JPanel logInScreen, signUpScreen;
 
     private Client client = new Client();
+    private SignInScreen signInScreen;
+    private SignUpScreen signUpScreen;
+    private ProfileScreen profileScreen;
     private HomeScreen homeScreen;
 
     public ClientFrame() {
@@ -37,7 +39,6 @@ public class ClientFrame extends JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/logo.png")));
 
         addComponents();
-        addListeners();
 
         setVisible(true);
         pack();
@@ -58,8 +59,8 @@ public class ClientFrame extends JFrame {
         content.setLayout(new CardLayout());
         add(content);
 
-        logInScreen = new SignInScreen(this, client);
-        content.add(logInScreen, ScreenType.SIGNIN.name());
+        signInScreen = new SignInScreen(this, client);
+        content.add(signInScreen, ScreenType.SIGNIN.name());
 
         signUpScreen = new SignUpScreen(this, client);
         content.add(signUpScreen, ScreenType.SIGNUP.name());
@@ -70,20 +71,31 @@ public class ClientFrame extends JFrame {
         homeScreen = new HomeScreen(this, client);
         content.add(homeScreen, ScreenType.HOME.name());
 
+        profileScreen = new ProfileScreen(this);
+        content.add(profileScreen, ScreenType.PROFILE.name());
+
         setActiveScreen(ScreenType.LOADING);
     }
 
-    private void addListeners() {
-
-    }
-
     public void setActiveScreen(ScreenType type) {
-        if (type == ScreenType.HOME) {
-            homeScreen.setIcon();
-        }
-
         CardLayout layout = (CardLayout) content.getLayout();
         layout.show(content, type.name());
+    }
+
+    public SignInScreen getSignInScreen() {
+        return signInScreen;
+    }
+
+    public SignUpScreen getSignUpScreen() {
+        return signUpScreen;
+    }
+
+    public ProfileScreen getProfileScreen() {
+        return profileScreen;
+    }
+
+    public HomeScreen getHomeScreen() {
+        return homeScreen;
     }
 
     public static void main(String[] args) {

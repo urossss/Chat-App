@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
@@ -15,11 +17,35 @@ import javax.swing.JPanel;
 public class ProfilePicturePanel extends JPanel {
 
     private Image profilePicture;
-    
+    private final int maxOffset;
+    private int offset = 1;
+
+    public ProfilePicturePanel() {
+        this(0);
+    }
+
+    public ProfilePicturePanel(int _offset) {
+        offset = maxOffset = _offset;
+    }
+
     public void setImage(ImageIcon originalIcon) {
         Image originalImage = originalIcon.getImage();
         Image scaledImage = originalImage.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
         profilePicture = scaledImage;
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                offset = 0;
+                repaint();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                offset = maxOffset;
+                repaint();
+            }
+        });
     }
 
     @Override
@@ -34,7 +60,7 @@ public class ProfilePicturePanel extends JPanel {
         }
 
         Shape outer = new Rectangle2D.Double(0, 0, getWidth(), getHeight());
-        Shape inner = new Ellipse2D.Double(0, 0, getWidth(), getHeight());
+        Shape inner = new Ellipse2D.Double(offset, offset, getWidth() - 2 * offset, getHeight() - 2 * offset);
         Area area = new Area(outer);
         area.subtract(new Area(inner));
 

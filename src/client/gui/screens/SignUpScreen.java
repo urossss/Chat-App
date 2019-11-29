@@ -328,7 +328,9 @@ public class SignUpScreen extends javax.swing.JPanel {
                     profilePicturePath
             );
             if (response.equals("OK")) {
+                clientFrame.getHomeScreen().setIcon();
                 clientFrame.setActiveScreen(ScreenType.HOME);
+
                 errorLabel.setForeground(Color.white);
             } else {
                 errorLabel.setText(response);
@@ -338,7 +340,7 @@ public class SignUpScreen extends javax.swing.JPanel {
     }//GEN-LAST:event_signupButtonActionPerformed
 
     private void signupButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupButtonMouseEntered
-        signupButton.setBackground(new Color(104,185,243));
+        signupButton.setBackground(new Color(104, 185, 243));
     }//GEN-LAST:event_signupButtonMouseEntered
 
     private void signupButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupButtonMouseExited

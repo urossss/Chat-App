@@ -2,13 +2,13 @@ package client;
 
 import javax.swing.ImageIcon;
 
-public class ClientUserInformation {
+public class UserInformation {
 
     private int id;
     private String firstName, lastName;
     private ImageIcon profilePicture;
 
-    public ClientUserInformation(int _id, String _firstName, String _lastName) {
+    public UserInformation(int _id, String _firstName, String _lastName) {
         id = _id;
         firstName = _firstName;
         lastName = _lastName;

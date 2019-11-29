@@ -53,7 +53,7 @@ public class HomeScreen extends javax.swing.JPanel {
             label.setForeground(Color.red);
             label.setBorder(BorderFactory.createLineBorder(Color.black));
 
-            chatsPanel.add(label);
+            chatsPanel.add(label, (int) (Math.random() * i));
         }
         chatsPanel.revalidate();
         chatsPanel.repaint();
@@ -80,7 +80,7 @@ public class HomeScreen extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        profilePicturePanel = new ProfilePicturePanel();
+        profilePicturePanel = new ProfilePicturePanel(1);
         jLabel1 = new javax.swing.JLabel();
         chatsScrollPane = new javax.swing.JScrollPane();
         chatsPanel = new javax.swing.JPanel();
@@ -89,6 +89,13 @@ public class HomeScreen extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(400, 550));
         setMinimumSize(new java.awt.Dimension(400, 550));
         setRequestFocusEnabled(false);
+
+        profilePicturePanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        profilePicturePanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                profilePicturePanelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout profilePicturePanelLayout = new javax.swing.GroupLayout(profilePicturePanel);
         profilePicturePanel.setLayout(profilePicturePanelLayout);
@@ -101,7 +108,7 @@ public class HomeScreen extends javax.swing.JPanel {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
         jLabel1.setText("Chats");
 
         chatsScrollPane.setHorizontalScrollBar(null);
@@ -150,6 +157,11 @@ public class HomeScreen extends javax.swing.JPanel {
                 .addGap(10, 10, 10))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void profilePicturePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePicturePanelMouseClicked
+        clientFrame.getProfileScreen().setUser(client.getUser());
+        clientFrame.setActiveScreen(ScreenType.PROFILE);
+    }//GEN-LAST:event_profilePicturePanelMouseClicked
 
     private ClientFrame clientFrame;
     private Client client;
