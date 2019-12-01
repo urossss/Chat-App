@@ -1,5 +1,7 @@
 package client.gui.screens;
 
+import client.gui.components.CustomTextField;
+import client.gui.components.CustomPasswordField;
 import client.Client;
 import client.gui.ClientFrame;
 import java.awt.Color;

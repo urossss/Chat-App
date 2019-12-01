@@ -1,12 +1,12 @@
-package client.gui.screens;
+package client.gui.components;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
-import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
-public class CustomPasswordField extends JPasswordField {
+public class CustomTextField extends JTextField {
 
     private Color defaultTextColor = new Color(153, 153, 153);
     private Color textColor = new Color(80, 80, 80);
@@ -14,9 +14,8 @@ public class CustomPasswordField extends JPasswordField {
     private boolean typing;
     private List<JLabel> designatedLabels = new ArrayList<>();
 
-    public CustomPasswordField(String _defaultText) {
+    public CustomTextField(String _defaultText) {
         defaultText = _defaultText;
-        setEchoChar('\u0000');
 
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             @Override
@@ -37,11 +36,10 @@ public class CustomPasswordField extends JPasswordField {
         addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                String previousPassword = String.valueOf(getPassword());
-                if (previousPassword.equals(defaultText) && !typing) {
+                String previousText = getText();
+                if (previousText.equals(defaultText) && !typing) {
                     setText("");
                     setForeground(textColor);
-                    setEchoChar('\u25cf');
                     typing = true;
                 }
                 for (JLabel designatedLabel : designatedLabels) {
@@ -51,14 +49,12 @@ public class CustomPasswordField extends JPasswordField {
 
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                String password = String.valueOf(getPassword());
-                if (password.isEmpty()) {
+                if (getText().isEmpty()) {
                     setText(defaultText);
                     setCaretPosition(0);
                     setForeground(defaultTextColor);
-                    setEchoChar('\u0000');
                     typing = false;
-                } else if (password.equals(defaultText) && !typing) {
+                } else if (getText().equals(defaultText) && !typing) {
                     setCaretPosition(0);
                 }
             }

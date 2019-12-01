@@ -1,4 +1,4 @@
-package client.gui.screens;
+package client.gui.components;
 
 import java.awt.Color;
 import java.awt.Graphics;

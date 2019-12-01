@@ -1,6 +1,7 @@
 package common;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class FileHelper {
 
@@ -116,6 +118,12 @@ public class FileHelper {
     public static String getFileExtension(String path) {
         int lastDot = path.lastIndexOf('.');
         return path.substring(lastDot);
+    }
+
+    public static Image getScaledImageFromPath(ImageIcon originalIcon, int width, int height, int hints) {
+        Image originalImage = originalIcon.getImage();
+        Image scaledImage = originalImage.getScaledInstance(width, height, hints);
+        return scaledImage;
     }
 
 }
