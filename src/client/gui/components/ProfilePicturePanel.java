@@ -1,6 +1,7 @@
 package client.gui.components;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -26,12 +27,6 @@ public class ProfilePicturePanel extends JPanel {
 
     public ProfilePicturePanel(int _offset) {
         offset = maxOffset = _offset;
-    }
-
-    public void setImage(ImageIcon originalIcon) {
-        Image originalImage = originalIcon.getImage();
-        Image scaledImage = originalImage.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
-        profilePicture = scaledImage;
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -46,6 +41,23 @@ public class ProfilePicturePanel extends JPanel {
                 repaint();
             }
         });
+    }
+
+    public ProfilePicturePanel(ImageIcon profilePicture, Dimension size, int _offset) {
+        this(_offset);
+
+        setPreferredSize(size);
+        setMaximumSize(size);
+        setMinimumSize(size);
+        setSize(size);
+
+        setImage(profilePicture);
+    }
+
+    public void setImage(ImageIcon originalIcon) {
+        Image originalImage = originalIcon.getImage();
+        Image scaledImage = originalImage.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
+        profilePicture = scaledImage;
     }
 
     @Override

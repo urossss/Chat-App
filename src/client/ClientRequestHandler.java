@@ -16,7 +16,8 @@ import javafx.util.Pair;
 public class ClientRequestHandler extends Thread {
 
     private static final String SERVER_IP = "94.189.225.68";
-    private static final int SERVER_PORT = 4000;
+    //private static final String SERVER_IP = "192.168.0.30";
+    private static final int SERVER_PORT = 4444;
 
     private Socket socket;
     private BufferedReader in;

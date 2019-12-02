@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class Server extends Thread {
 
-    private final int PORT = 4000;
+    private final int PORT = 4444;
 
     public final String ROOT = System.getProperty("user.dir") + "\\Root";
     private final String USERS = ROOT + "\\Users", CHATS = ROOT + "\\Chats";
