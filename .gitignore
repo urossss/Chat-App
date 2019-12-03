@@ -2,12 +2,20 @@
 *
 
 # Don't ignore folders
-!src/
+!*/
+
+build/
+dist/
+nbproject/
+Root/
+test/
+tmp/
 
 # Don't ignore .gitignore and *.java files
 !.gitignore
 !*.java
 
-!*.png
+# Don't ignore res images
 !*.jpg
+!*.png
 !*.gif
