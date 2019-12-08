@@ -128,7 +128,7 @@ public class ClientRequestHandler extends Thread {
                         }
                         break;
                 }
-            } catch (Exception e) {
+            } catch (IOException | InterruptedException | NumberFormatException e) {
                 e.printStackTrace();
             }
         }

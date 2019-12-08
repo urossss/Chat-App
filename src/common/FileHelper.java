@@ -35,7 +35,6 @@ public class FileHelper {
         fis.read(bytes, 0, length);
         os.write(bytes, 0, length);
         os.flush();
-        System.out.println("Sent");
         fis.close();
     }
 
@@ -44,9 +43,7 @@ public class FileHelper {
         FileOutputStream fos = new FileOutputStream(path);
         byte bytes[] = new byte[length];
         is.read(bytes, 0, length);
-        System.out.println("Received");
         fos.write(bytes, 0, length);
-        System.out.println("Done");
         fos.close();
     }
 

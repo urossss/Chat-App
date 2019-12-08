@@ -2,7 +2,6 @@ package server;
 
 import common.RequestType;
 import common.FileHelper;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,13 +10,14 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import javax.imageio.ImageIO;
 
 public class ServerRequestHandler extends Thread {
 
     private static int ID = 1;
 
     private int handlerId = ID++;
+    private Logger logger;
+
     private Server server;
     private Socket socket;
     private PrintWriter out;
@@ -36,41 +36,56 @@ public class ServerRequestHandler extends Thread {
         }
     }
 
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
     public void setUser(UserInformation user) {
         this.user = user;
     }
 
+    public int getHandlerId() {
+        return handlerId;
+    }
+
     private String signIn(String request) {
-        System.out.println("Sign in called: " + request);
         String[] info = request.split("#");
         String username = info[0], password = info[1];
+
+        logger.log(String.format("signIn username=%s password=%s", username, password), handlerId);
+
         try {
             server.signIn(this, username, password);
         } catch (ServerException e) {
+            logger.log(String.format("signIn ERROR=%s", e.getMessage()), handlerId);
             return "ERROR" + e.getMessage();
         }
         return "OK";
     }
 
     private String signUp(String request) {
-        System.out.println("Sign up called: " + request);
         String[] info = request.split("#");
         String username = info[0], password = info[1], firstName = info[2], lastName = info[3];
+
+        logger.log(String.format("signIn username=%s password=%s firstName=%s lastName=%s", username, password, firstName, lastName), handlerId);
+
         int pictureLength = Integer.parseInt(info[4]);
         try {
             server.signUp(this, new UserInformation(username, password, firstName, lastName));
         } catch (ServerException e) {
+            logger.log(String.format("signUp ERROR=%s", e.getMessage()), handlerId);
             return "ERROR" + e.getMessage();
         }
         return pictureLength > 0 ? "IMAGE" : "OK";
     }
 
     private void receiveProfilePicture(String request) throws IOException {
-        System.out.println("Receive profile picture called: " + request);
-
         String[] info = request.split("#");
         int length = Integer.parseInt(info[0]);
         String extension = info[1];
+
+        logger.log(String.format("receiveProfilePicture: info length=%d extension=%s", length, extension), handlerId);
+
         String profilePictureTmpPath = user.getRootFolderPath() + "\\tmp" + user.getId() + extension;
         String profilePicturePath = user.getRootFolderPath() + "\\" + user.getId() + extension;
 
@@ -78,8 +93,12 @@ public class ServerRequestHandler extends Thread {
         out.flush();
         FileHelper.receiveFile(socket, in, out, profilePictureTmpPath, length);
 
+        logger.log("receiveProfilePicture: picture received", handlerId);
+
         FileHelper.cropImage(profilePictureTmpPath, profilePicturePath);
         Files.deleteIfExists(Paths.get(profilePictureTmpPath));
+
+        logger.log("receiveProfilePicture: picture cropped", handlerId);
 
         String infoFilePath = user.getRootFolderPath() + "\\profilePictureName.txt";
         if (!Files.exists(Paths.get(infoFilePath))) {
@@ -89,11 +108,14 @@ public class ServerRequestHandler extends Thread {
         pw.close();
         Files.write(Paths.get(infoFilePath), profilePicturePath.getBytes());
 
-        System.out.println("Profile picture saved.");
         user.setProfilePicturePath(profilePicturePath);
+
+        logger.log("receiveProfilePicture: picture saved", handlerId);
     }
 
     private void sendProfilePicture(int userId) {
+        logger.log(String.format("sendProfilePicture: info userId=%d", userId), handlerId);
+
         UserInformation user = this.user;
         if (userId != this.user.getId()) {
             user = server.getUserInformation(userId);
@@ -103,17 +125,23 @@ public class ServerRequestHandler extends Thread {
             String userPath = user.getProfilePicturePath();
             if (userPath != null) {
                 FileHelper.sendFile(socket, in, out, userPath);
+
+                logger.log("sendProfilePicture: pricture sent", handlerId);
             } else {
-                System.out.println("No profile picture for user " + userId);
+                logger.log("sendProfilePicture: pricture not found", handlerId);
+
                 out.println("ERROR");
                 out.flush();
             }
         } catch (IOException e) {
+            logger.log(String.format("sendProfilePicture: IOException=%s", e.getMessage()), handlerId);
             e.printStackTrace();
         }
     }
 
     private void sendBasicData(int userId, boolean shouldSendProfilePicture) {
+        logger.log(String.format("sendBasicData: info userId=%d sendPicture=%b", userId, shouldSendProfilePicture), handlerId);
+
         UserInformation user = this.user;
         if (userId != this.user.getId()) {
             user = server.getUserInformation(userId);
@@ -121,13 +149,16 @@ public class ServerRequestHandler extends Thread {
 
         String profilePictureResponse = "0";    // user doesn't have a profile picture
         if (shouldSendProfilePicture) {
-            profilePictureResponse = "2";       // user shoul upload profile picture now
+            profilePictureResponse = "2";       // user should upload profile picture now
         } else if (user.hasProfilePicture()) {
             profilePictureResponse = "1";       // user has a profile picture
         }
         String basicInfo = user.getId() + "#" + user.getFirstName() + "#" + user.getLastName() + "#" + profilePictureResponse;
         out.println(basicInfo);
         out.flush();
+
+        logger.log(String.format("sendBasicData: sent userId=%d firstName=%s lastName=%s pictureResponse=%s",
+                user.getId(), user.getFirstName(), user.getLastName(), profilePictureResponse), handlerId);
     }
 
     private void sendBasicData(int userId) {
@@ -138,13 +169,23 @@ public class ServerRequestHandler extends Thread {
         sendBasicData(user.getId(), false);
     }
 
+    public void closeSocket() {
+        try {
+            in.close();
+            out.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run() {
-        System.out.println("Request handler " + handlerId + " started.");
+        logger.log("Request handler " + handlerId + " started.", handlerId);
 
         while (!socket.isInputShutdown()) {
             try {
-                String request = in.readLine(), response = "";
+                String request = in.readLine(), response;
                 if (request == null) {
                     break;
                 }
@@ -186,28 +227,25 @@ public class ServerRequestHandler extends Thread {
                         userId = Integer.parseInt(requestContent);
                         sendProfilePicture(userId);
                         break;
+                    default:
+                        logger.log(String.format("Unknown operation: %s", request), handlerId);
+                        throw new SocketException();
                 }
-                /*System.out.println("[" + id + "] Request: " + request);
-                if (request.equals("stop")) {
-                    out.println("stop");
-                    break;
-                }
-
-                String response = "Next number " + ++messageNumber;
-                System.out.println("[" + id + "] Response: " + response);
-                 */
-
-                //if (!response.equals("")) {
-                //    out.println(response);
-                //}
             } catch (SocketException e) {
-                e.printStackTrace();
+                if (user != null) {
+                    server.removeHandler(user.getId(), handlerId);
+                }
+                closeSocket();
+
+                logger.log("Connection reset.", handlerId);
+                System.err.println(e.getMessage());
                 break;
             } catch (Exception e) {
+                logger.log(String.format("Unknown exception: %s", e.getMessage()), handlerId);
                 e.printStackTrace();
             }
         }
 
-        System.out.println("Request handler " + handlerId + " stopped.");
+        logger.log("Request handler " + handlerId + " stopped.", handlerId);
     }
 }

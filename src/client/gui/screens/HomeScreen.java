@@ -198,7 +198,7 @@ public class HomeScreen extends javax.swing.JPanel {
             return;
         }
 
-        chatsPanel.add(new OthersMessagePanel(jTextField1.getText(), client.getProfilePicture()));
+        chatsPanel.add(new FriendsMessagePanel(jTextField1.getText(), client.getProfilePicture()));
         jTextField1.setText("");
 
         chatsPanel.add(Box.createRigidArea(new Dimension(0, 5)));

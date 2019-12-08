@@ -4,12 +4,12 @@ import client.gui.UISettings;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 
-public class OthersMessagePanel extends MessagePanel {
+public class FriendsMessagePanel extends MessagePanel {
 
     private final int PADDING = 5;
     private ProfilePicturePanel profilePicturePanel;
 
-    public OthersMessagePanel(String message, ImageIcon profilePicture) {
+    public FriendsMessagePanel(String message, ImageIcon profilePicture) {
         super(message, UISettings.COLOR_BUBBLE_BACKGROUND_LEFT, UISettings.COLOR_BUBBLE_TEXT_LEFT);
 
         profilePicturePanel = new ProfilePicturePanel(profilePicture, new Dimension(35, 35), 1);
