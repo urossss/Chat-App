@@ -227,9 +227,12 @@ public class ServerRequestHandler extends Thread {
                         userId = Integer.parseInt(requestContent);
                         sendProfilePicture(userId);
                         break;
+                    case POLL:
+                        //logger.log("Poll", handlerId);
+                        break;
                     default:
                         logger.log(String.format("Unknown operation: %s", request), handlerId);
-                        throw new SocketException();
+                        throw new SocketException("Unknown operation");
                 }
             } catch (SocketException e) {
                 if (user != null) {
@@ -237,7 +240,7 @@ public class ServerRequestHandler extends Thread {
                 }
                 closeSocket();
 
-                logger.log("Connection reset.", handlerId);
+                logger.log(e.getMessage(), handlerId);
                 System.err.println(e.getMessage());
                 break;
             } catch (Exception e) {

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Timer;
 import javafx.util.Pair;
 
 public class ClientRequestHandler extends Thread {
@@ -28,6 +29,8 @@ public class ClientRequestHandler extends Thread {
     private final Map<Integer, String> responses = new HashMap<>();
 
     public ClientRequestHandler() {
+        ServerPoller poller = new ServerPoller(this);
+        new Timer().schedule(poller, 1000, 1000);
     }
 
     public void establishConnection() throws IOException {
@@ -126,6 +129,9 @@ public class ClientRequestHandler extends Thread {
                             responses.put(requestId, response);
                             responses.notifyAll();
                         }
+                        break;
+                    case POLL:
+                        out.println(requestMessage);
                         break;
                 }
             } catch (IOException | InterruptedException | NumberFormatException e) {
