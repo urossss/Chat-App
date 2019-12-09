@@ -1,6 +1,6 @@
 package client.gui.components;
 
-import client.gui.UISettings;
+import client.gui.GuiSettings;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Calendar;
@@ -14,7 +14,7 @@ public abstract class MessagePanel extends JPanel {
     protected JLabel timeLabel;
 
     public MessagePanel(String message, Color bubbleBackground, Color bubbleForeground) {
-        setBackground(UISettings.COLOR_BACKGROUND);
+        setBackground(GuiSettings.COLOR_BACKGROUND);
         
         chatBubblePanel = new ChatBubblePanel(message, bubbleBackground, bubbleForeground);
         timeLabel = new JLabel();
@@ -25,7 +25,7 @@ public abstract class MessagePanel extends JPanel {
         timeLabel.setText(String.format("%d:%02d", hour, minute));
         timeLabel.setFont(new Font("Sergoe UI", Font.PLAIN, 10));
         timeLabel.setBorder(new EmptyBorder(2, 4, 2, 4));
-        timeLabel.setForeground(UISettings.COLOR_TEXT_LIGHT);
+        timeLabel.setForeground(GuiSettings.COLOR_TEXT_LIGHT);
 
         add(timeLabel);
         add(chatBubblePanel);

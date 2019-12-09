@@ -1,6 +1,6 @@
 package client.gui.components;
 
-import client.gui.UISettings;
+import client.gui.GuiSettings;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,8 @@ import javax.swing.JTextField;
 
 public class CustomTextField extends JTextField {
 
-    private Color defaultTextColor = UISettings.COLOR_TEXT_LIGHT;
-    private Color textColor = UISettings.COLOR_TEXT_DARK;
+    private Color defaultTextColor = GuiSettings.COLOR_TEXT_LIGHT;
+    private Color textColor = GuiSettings.COLOR_TEXT_DARK;
     private String defaultText;
     private boolean typing;
     private List<JLabel> designatedLabels = new ArrayList<>();
@@ -44,7 +44,7 @@ public class CustomTextField extends JTextField {
                     typing = true;
                 }
                 for (JLabel designatedLabel : designatedLabels) {
-                    designatedLabel.setForeground(UISettings.COLOR_BACKGROUND);
+                    designatedLabel.setForeground(GuiSettings.COLOR_BACKGROUND);
                 }
             }
 

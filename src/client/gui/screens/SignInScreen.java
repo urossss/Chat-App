@@ -4,8 +4,9 @@ import client.gui.components.CustomTextField;
 import client.gui.components.CustomPasswordField;
 import client.Client;
 import client.gui.ClientFrame;
-import client.gui.UISettings;
-import java.awt.Color;
+import client.gui.GuiSettings;
+import client.gui.components.CustomButton;
+import client.gui.components.CustomLabel;
 import javax.swing.border.LineBorder;
 
 /**
@@ -23,18 +24,14 @@ public class SignInScreen extends javax.swing.JPanel {
     public SignInScreen(ClientFrame _clientFrame, Client _client) {
         initComponents();
 
-        setBackground(UISettings.COLOR_BACKGROUND);
+        setBackground(GuiSettings.COLOR_BACKGROUND);
 
         clientFrame = _clientFrame;
         client = _client;
 
-        signinButton.setContentAreaFilled(false);
-        signinButton.setOpaque(true);
-        signinButton.setBorder(new LineBorder(UISettings.COLOR_TEXT_LIGHT));
-
-        requiredUsernameLabel.setForeground(UISettings.COLOR_BACKGROUND);
-        requiredPasswordLabel.setForeground(UISettings.COLOR_BACKGROUND);
-        errorLabel.setForeground(UISettings.COLOR_BACKGROUND);
+        requiredUsernameLabel.setForeground(GuiSettings.COLOR_BACKGROUND);
+        requiredPasswordLabel.setForeground(GuiSettings.COLOR_BACKGROUND);
+        errorLabel.setForeground(GuiSettings.COLOR_BACKGROUND);
 
         CustomTextField username = (CustomTextField) usernameField;
         username.addDesignatedLabel(requiredUsernameLabel);
@@ -56,8 +53,8 @@ public class SignInScreen extends javax.swing.JPanel {
 
         logoLabel = new javax.swing.JLabel();
         usernameField = new CustomTextField("Username");
-        signinButton = new javax.swing.JButton();
-        signupLabel = new javax.swing.JLabel();
+        signinButton = new CustomButton();
+        signupLabel = new CustomLabel();
         passwordField = new CustomPasswordField("Password");
         requiredUsernameLabel = new javax.swing.JLabel();
         requiredPasswordLabel = new javax.swing.JLabel();
@@ -70,24 +67,14 @@ public class SignInScreen extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(400, 550));
 
         usernameField.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        usernameField.setForeground(UISettings.COLOR_TEXT_LIGHT);
+        usernameField.setForeground(GuiSettings.COLOR_TEXT_LIGHT);
         usernameField.setText("Username");
         usernameField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         usernameField.setMargin(new java.awt.Insets(2, 15, 2, 2));
 
-        signinButton.setBackground(UISettings.COLOR_MAIN);
         signinButton.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        signinButton.setForeground(UISettings.COLOR_BACKGROUND);
         signinButton.setText("Sign In");
         signinButton.setFocusPainted(false);
-        signinButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                signinButtonMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                signinButtonMouseExited(evt);
-            }
-        });
         signinButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 signinButtonActionPerformed(evt);
@@ -95,37 +82,30 @@ public class SignInScreen extends javax.swing.JPanel {
         });
 
         signupLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        signupLabel.setForeground(UISettings.COLOR_MAIN);
         signupLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         signupLabel.setText("Don't have an account? Sign Up");
         signupLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 signupLabelMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                signupLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                signupLabelMouseExited(evt);
-            }
         });
 
         passwordField.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        passwordField.setForeground(UISettings.COLOR_TEXT_LIGHT);
+        passwordField.setForeground(GuiSettings.COLOR_TEXT_LIGHT);
         passwordField.setText("Password");
         passwordField.setEchoChar('\u0000');
         passwordField.setMargin(new java.awt.Insets(2, 15, 2, 2));
 
         requiredUsernameLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        requiredUsernameLabel.setForeground(UISettings.COLOR_ERROR);
+        requiredUsernameLabel.setForeground(GuiSettings.COLOR_ERROR);
         requiredUsernameLabel.setText("Required");
 
         requiredPasswordLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        requiredPasswordLabel.setForeground(UISettings.COLOR_ERROR);
+        requiredPasswordLabel.setForeground(GuiSettings.COLOR_ERROR);
         requiredPasswordLabel.setText("Required");
 
         errorLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        errorLabel.setForeground(UISettings.COLOR_ERROR);
+        errorLabel.setForeground(GuiSettings.COLOR_ERROR);
         errorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         errorLabel.setText("Username or password is incorrect.");
         errorLabel.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
@@ -179,14 +159,6 @@ public class SignInScreen extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void signupLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupLabelMouseEntered
-        signupLabel.setForeground(UISettings.COLOR_MAIN_DARK);
-    }//GEN-LAST:event_signupLabelMouseEntered
-
-    private void signupLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupLabelMouseExited
-        signupLabel.setForeground(UISettings.COLOR_MAIN);
-    }//GEN-LAST:event_signupLabelMouseExited
-
     private void signupLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupLabelMouseClicked
         clientFrame.setActiveScreen(ScreenType.SIGNUP);
     }//GEN-LAST:event_signupLabelMouseClicked
@@ -195,13 +167,13 @@ public class SignInScreen extends javax.swing.JPanel {
         boolean inputValid = true;
         CustomTextField customUsernameField = (CustomTextField) usernameField;
         if (!customUsernameField.isInputValid()) {
-            requiredUsernameLabel.setForeground(UISettings.COLOR_ERROR);
+            requiredUsernameLabel.setForeground(GuiSettings.COLOR_ERROR);
             inputValid = false;
         }
 
         CustomPasswordField customPasswordField = (CustomPasswordField) passwordField;
         if (!customPasswordField.isInputValid()) {
-            requiredPasswordLabel.setForeground(UISettings.COLOR_ERROR);
+            requiredPasswordLabel.setForeground(GuiSettings.COLOR_ERROR);
             inputValid = false;
         }
 
@@ -211,20 +183,12 @@ public class SignInScreen extends javax.swing.JPanel {
                 clientFrame.getHomeScreen().setIcon();
                 clientFrame.setActiveScreen(ScreenType.HOME);
 
-                errorLabel.setForeground(UISettings.COLOR_BACKGROUND);
+                errorLabel.setForeground(GuiSettings.COLOR_BACKGROUND);
             } else {
-                errorLabel.setForeground(UISettings.COLOR_ERROR);
+                errorLabel.setForeground(GuiSettings.COLOR_ERROR);
             }
         }
     }//GEN-LAST:event_signinButtonActionPerformed
-
-    private void signinButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signinButtonMouseEntered
-        signinButton.setBackground(UISettings.COLOR_MAIN_LIGHT);
-    }//GEN-LAST:event_signinButtonMouseEntered
-
-    private void signinButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signinButtonMouseExited
-        signinButton.setBackground(UISettings.COLOR_MAIN);
-    }//GEN-LAST:event_signinButtonMouseExited
 
     private ClientFrame clientFrame;
     private Client client;

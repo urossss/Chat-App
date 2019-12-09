@@ -1,6 +1,7 @@
 package client.gui.screens;
 
 import client.gui.ClientFrame;
+import client.gui.components.CustomButton;
 
 /**
  *
@@ -32,7 +33,7 @@ public class LoadingErrorScreen extends javax.swing.JPanel {
         logoLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        retryButton = new javax.swing.JButton();
+        retryButton = new CustomButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(400, 550));
@@ -56,9 +57,10 @@ public class LoadingErrorScreen extends javax.swing.JPanel {
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/client/gui/res/error.jpg"))); // NOI18N
 
-        retryButton.setBackground(new java.awt.Color(34, 156, 243));
-        retryButton.setForeground(new java.awt.Color(255, 255, 255));
         retryButton.setText("Retry");
+        retryButton.setMaximumSize(new java.awt.Dimension(80, 23));
+        retryButton.setMinimumSize(new java.awt.Dimension(80, 23));
+        retryButton.setPreferredSize(new java.awt.Dimension(80, 23));
         retryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 retryButtonActionPerformed(evt);
@@ -95,7 +97,7 @@ public class LoadingErrorScreen extends javax.swing.JPanel {
                 .addGap(27, 27, 27)
                 .addComponent(jLabel3)
                 .addGap(34, 34, 34)
-                .addComponent(retryButton)
+                .addComponent(retryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(107, 107, 107))
         );
     }// </editor-fold>//GEN-END:initComponents

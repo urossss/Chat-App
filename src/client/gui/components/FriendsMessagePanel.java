@@ -1,6 +1,6 @@
 package client.gui.components;
 
-import client.gui.UISettings;
+import client.gui.GuiSettings;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 
@@ -10,7 +10,7 @@ public class FriendsMessagePanel extends MessagePanel {
     private ProfilePicturePanel profilePicturePanel;
 
     public FriendsMessagePanel(String message, ImageIcon profilePicture) {
-        super(message, UISettings.COLOR_BUBBLE_BACKGROUND_LEFT, UISettings.COLOR_BUBBLE_TEXT_LEFT);
+        super(message, GuiSettings.COLOR_BUBBLE_BACKGROUND_LEFT, GuiSettings.COLOR_BUBBLE_TEXT_LEFT);
 
         profilePicturePanel = new ProfilePicturePanel(profilePicture, new Dimension(35, 35), 1);
         add(profilePicturePanel);

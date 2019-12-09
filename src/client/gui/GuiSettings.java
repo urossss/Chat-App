@@ -2,7 +2,7 @@ package client.gui;
 
 import java.awt.Color;
 
-public class UISettings {
+public class GuiSettings {
 
     public static final Color COLOR_BACKGROUND = Color.WHITE;
     public static final Color COLOR_MAIN = new Color(34, 156, 243);

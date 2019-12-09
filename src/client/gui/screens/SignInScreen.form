@@ -88,7 +88,7 @@
           <Font name="Tahoma" size="13" style="0"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="UISettings.COLOR_TEXT_LIGHT" type="code"/>
+          <Connection code="GuiSettings.COLOR_TEXT_LIGHT" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Username"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -104,40 +104,33 @@
     </Component>
     <Component class="javax.swing.JButton" name="signinButton">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="UISettings.COLOR_MAIN" type="code"/>
-        </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="13" style="0"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="UISettings.COLOR_BACKGROUND" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Sign In"/>
         <Property name="focusPainted" type="boolean" value="false"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="signinButtonMouseEntered"/>
-        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="signinButtonMouseExited"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="signinButtonActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new CustomButton()"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="signupLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="0"/>
         </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="UISettings.COLOR_MAIN" type="code"/>
-        </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="Don&apos;t have an account? Sign Up"/>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="signupLabelMouseClicked"/>
-        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="signupLabelMouseEntered"/>
-        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="signupLabelMouseExited"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new CustomLabel()"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JPasswordField" name="passwordField">
       <Properties>
@@ -145,7 +138,7 @@
           <Font name="Tahoma" size="13" style="0"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="UISettings.COLOR_TEXT_LIGHT" type="code"/>
+          <Connection code="GuiSettings.COLOR_TEXT_LIGHT" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Password"/>
         <Property name="echoChar" type="char" value="\u0000" containsInvalidXMLChars="true"/>
@@ -163,7 +156,7 @@
           <Font name="Tahoma" size="10" style="0"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="UISettings.COLOR_ERROR" type="code"/>
+          <Connection code="GuiSettings.COLOR_ERROR" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Required"/>
       </Properties>
@@ -174,7 +167,7 @@
           <Font name="Tahoma" size="10" style="0"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="UISettings.COLOR_ERROR" type="code"/>
+          <Connection code="GuiSettings.COLOR_ERROR" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Required"/>
       </Properties>
@@ -185,7 +178,7 @@
           <Font name="Tahoma" size="12" style="0"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="UISettings.COLOR_ERROR" type="code"/>
+          <Connection code="GuiSettings.COLOR_ERROR" type="code"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="Username or password is incorrect."/>

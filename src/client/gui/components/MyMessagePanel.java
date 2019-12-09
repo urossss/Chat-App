@@ -1,6 +1,6 @@
 package client.gui.components;
 
-import client.gui.UISettings;
+import client.gui.GuiSettings;
 import java.awt.Dimension;
 
 public class MyMessagePanel extends MessagePanel {
@@ -8,7 +8,7 @@ public class MyMessagePanel extends MessagePanel {
     private static final int RIGHT = 20;
 
     public MyMessagePanel(String message) {
-        super(message, UISettings.COLOR_BUBBLE_BACKGROUND_RIGHT, UISettings.COLOR_BUBBLE_TEXT_RIGHT);
+        super(message, GuiSettings.COLOR_BUBBLE_BACKGROUND_RIGHT, GuiSettings.COLOR_BUBBLE_TEXT_RIGHT);
     }
 
     @Override

@@ -3,6 +3,7 @@ package client.gui.screens;
 import client.gui.components.ProfilePicturePanel;
 import client.UserInformation;
 import client.gui.ClientFrame;
+import client.gui.components.CustomLabel;
 import java.awt.Color;
 
 /**
@@ -38,7 +39,7 @@ public class ProfileScreen extends javax.swing.JPanel {
 
         profilePicturePanel = new ProfilePicturePanel();
         nameLabel = new javax.swing.JLabel();
-        signupLabel = new javax.swing.JLabel();
+        signupLabel = new CustomLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(400, 550));
@@ -61,18 +62,11 @@ public class ProfileScreen extends javax.swing.JPanel {
         nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         signupLabel.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
-        signupLabel.setForeground(new java.awt.Color(34, 156, 243));
         signupLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         signupLabel.setText("←");
         signupLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 signupLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                signupLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                signupLabelMouseExited(evt);
             }
         });
 
@@ -107,14 +101,6 @@ public class ProfileScreen extends javax.swing.JPanel {
     private void signupLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupLabelMouseClicked
         clientFrame.setActiveScreen(previousScreen);
     }//GEN-LAST:event_signupLabelMouseClicked
-
-    private void signupLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupLabelMouseEntered
-        signupLabel.setForeground(new Color(34, 115, 242));
-    }//GEN-LAST:event_signupLabelMouseEntered
-
-    private void signupLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signupLabelMouseExited
-        signupLabel.setForeground(new Color(34, 156, 243));
-    }//GEN-LAST:event_signupLabelMouseExited
 
     private ClientFrame clientFrame;
     private ScreenType previousScreen = ScreenType.HOME;

@@ -1,6 +1,6 @@
 package client.gui.components;
 
-import client.gui.UISettings;
+import client.gui.GuiSettings;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -21,7 +21,7 @@ public class ChatBubblePanel extends JPanel {
     private int panelWidth, panelHeight, textWidth, textHeight;
 
     public ChatBubblePanel(String text, Color background, Color foreground) {
-        setBackground(UISettings.COLOR_BACKGROUND);
+        setBackground(GuiSettings.COLOR_BACKGROUND);
         backgroundColor = background;
         
         textArea = new JTextArea(text);
