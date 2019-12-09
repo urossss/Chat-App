@@ -17,16 +17,18 @@ public class Server extends Thread {
     private final int PORT = 4444;
 
     public final String ROOT = System.getProperty("user.dir") + "\\Root";
-    private final String LOGS = ROOT + "\\LOGS";
+    private final String LOGS = ROOT + "\\Logs";
     private final String CURRENT_LOGS, SERVER_LOG;
-    private final String USERS = ROOT + "\\Users", CHATS = ROOT + "\\Chats";
+    private final String USERS = ROOT + "\\Users";
     private final String USERS_TXT = USERS + "\\users.txt";
+    private final String CHATS = ROOT + "\\Chats";
 
     private Logger logger;
 
     private ServerSocket serverSocket;
-    private Map<Integer, ServerRequestHandler> handlers = new HashMap<>();
-    private List<UserInformation> userInfos = new ArrayList<>();
+    private final Map<Integer, ServerRequestHandler> handlers = new HashMap<>();
+    private final Map<Integer, ChatInformation> chatInfos = new HashMap<>();
+    private final Map<Integer, UserInformation> userInfos = new HashMap<>();
 
     public Server() {
         CURRENT_LOGS = LOGS + "\\" + getDateAndTime();
@@ -84,15 +86,21 @@ public class Server extends Thread {
             for (String user : users) {
                 String[] info = user.split("#");
                 UserInformation userInfo = new UserInformation(Integer.parseInt(info[0]), info[1], info[2], info[3], info[4]);
-                userInfo.setRootFolderPath(USERS + "\\" + userInfo.getId());
+                String rootPath = USERS + "\\" + userInfo.getId();
+                userInfo.setRootFolderPath(rootPath);
 
-                String infoFilePath = userInfo.getRootFolderPath() + "\\profilePictureName.txt";
+                String infoFilePath = rootPath + "\\profilePictureName.txt";
                 if (Files.exists(Paths.get(infoFilePath))) {
                     String profilePicturePath = Files.readAllLines(Paths.get(infoFilePath)).get(0);
                     userInfo.setProfilePicturePath(profilePicturePath);
                 }
 
-                userInfos.add(userInfo);
+                List<String> chatIds = Files.readAllLines(Paths.get(rootPath + "\\chats.txt"));
+                for (String chatId : chatIds) {
+                    userInfo.addChatId(Integer.parseInt(chatId));
+                }
+
+                userInfos.put(userInfo.getId(), userInfo);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,68 +109,116 @@ public class Server extends Thread {
         logger.log(String.format("Number of users: %d", userInfos.size()), 0);
     }
 
-    public synchronized UserInformation signIn(ServerRequestHandler handler, String username, String password) throws ServerException {
-        logger.log(String.format("signIn handlerId=%d username=%s, password=%s", handler.getHandlerId(), username, password), 0);
+    public UserInformation signIn(ServerRequestHandler handler, String username, String password) throws ServerException {
+        synchronized (userInfos) {
+            logger.log(String.format("signIn handlerId=%d username=%s, password=%s", handler.getHandlerId(), username, password), 0);
 
-        for (UserInformation user : userInfos) {
-            if (user.getUsername().equals(username)) {
-                if (user.getPassword().equals(password)) {
-                    // TODO: prevent multiple logins from one user at the same time
-                    handlers.put(user.getId(), handler);
-                    handler.setUser(user);
+            for (UserInformation user : userInfos.values()) {
+                if (user.getUsername().equals(username)) {
+                    if (user.getPassword().equals(password)) {
+                        // TODO: prevent multiple logins from one user at the same time
+                        handlers.put(user.getId(), handler);
+                        handler.setUser(user);
 
-                    logger.log(String.format("signIn handlerId=%d SUCCESS", handler.getHandlerId()), 0);
-                    return user;
-                } else {
-                    break;
+                        logger.log(String.format("signIn handlerId=%d SUCCESS", handler.getHandlerId()), 0);
+                        return user;
+                    } else {
+                        break;
+                    }
                 }
             }
-        }
 
-        logger.log(String.format("signIn handlerId=%d ERROR=Username or password is incorrect.", handler.getHandlerId()), 0);
-        throw new ServerException("Username or password is incorrect.");
+            logger.log(String.format("signIn handlerId=%d ERROR=Username or password is incorrect.", handler.getHandlerId()), 0);
+            throw new ServerException("Username or password is incorrect.");
+        }
     }
 
-    public synchronized UserInformation signUp(ServerRequestHandler handler, UserInformation userInfo) throws ServerException {
-        logger.log(String.format("signIn handlerId=%d username=%s, password=%s firstName=%s lastName=%s",
-                handler.getHandlerId(), userInfo.getUsername(), userInfo.getPassword(), userInfo.getFirstName(), userInfo.getLastName()), 0);
+    public UserInformation signUp(ServerRequestHandler handler, UserInformation userInfo) throws ServerException {
+        synchronized (userInfos) {
+            logger.log(String.format("signIn handlerId=%d username=%s, password=%s firstName=%s lastName=%s",
+                    handler.getHandlerId(), userInfo.getUsername(), userInfo.getPassword(), userInfo.getFirstName(), userInfo.getLastName()), 0);
 
-        for (UserInformation user : userInfos) {
-            if (user.getId() == userInfo.getId()) {
-                logger.log(String.format("signIn handlerId=%d ERROR=User id already exists.", handler.getHandlerId()), 0);
-                throw new ServerException("Internal server error: user id already exists.");
+            for (UserInformation user : userInfos.values()) {
+                if (user.getId() == userInfo.getId()) {
+                    logger.log(String.format("signIn handlerId=%d ERROR=User id already exists.", handler.getHandlerId()), 0);
+                    throw new ServerException("Internal server error: user id already exists.");
+                }
+                if (user.getUsername().equals(userInfo.getUsername())) {
+                    logger.log(String.format("signIn handlerId=%d ERROR=Username already exists.", handler.getHandlerId()), 0);
+                    throw new ServerException("Username already exists.");
+                }
             }
-            if (user.getUsername().equals(userInfo.getUsername())) {
-                logger.log(String.format("signIn handlerId=%d ERROR=Username already exists.", handler.getHandlerId()), 0);
-                throw new ServerException("Username already exists.");
+
+            userInfo.setId(userInfos.size() + 1);
+            handlers.put(userInfo.getId(), handler);
+            handler.setUser(userInfo);
+
+            try {
+                Files.write(Paths.get(USERS_TXT), (userInfo.serialize() + "\n").getBytes(), StandardOpenOption.APPEND);
+
+                String rootFolder = USERS + "\\" + userInfo.getId();
+                userInfo.setRootFolderPath(rootFolder);
+
+                Files.createDirectory(Paths.get(rootFolder));
+                Files.createFile(Paths.get(rootFolder + "\\chats.txt"));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+            userInfos.put(userInfo.getId(), userInfo);
+
+            logger.log(String.format("signIn handlerId=%d SUCCESS", handler.getHandlerId()), 0);
+            return userInfo;
         }
-
-        userInfo.setId(userInfos.size() + 1);
-        handlers.put(userInfo.getId(), handler);
-        handler.setUser(userInfo);
-
-        try {
-            Files.write(Paths.get(USERS_TXT), (userInfo.serialize() + "\n").getBytes(), StandardOpenOption.APPEND);
-            String rootFolder = USERS + "\\" + userInfo.getId();
-            Files.createDirectory(Paths.get(rootFolder));
-            userInfo.setRootFolderPath(rootFolder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        userInfos.add(userInfo);
-
-        logger.log(String.format("signIn handlerId=%d SUCCESS", handler.getHandlerId()), 0);
-        return userInfo;
     }
 
-    public synchronized UserInformation getUserInformation(int userId) {
-        return userInfos.get(userId);
+    public UserInformation getUserInformation(int userId) {
+        synchronized (userInfos) {
+            return userInfos.get(userId);
+        }
     }
 
-    public synchronized void removeHandler(int userId, int handlerId) {
-        handlers.remove(userId);
+    public ChatInformation getChatInformation(int chatId) {
+        synchronized (chatInfos) {
+            logger.log(String.format("getChatInformation chatId=%d", chatId), 0);
+
+            if (chatInfos.containsKey(chatId)) {
+                return chatInfos.get(chatId);
+            }
+
+            String chatPath = CHATS + "\\" + chatId;
+            String usersPath = chatPath + "_info.txt";
+            String messagesPath = chatPath + "_messages.txt";
+
+            if (!Files.exists(Paths.get(usersPath)) || !Files.exists(Paths.get(messagesPath))) {
+                return null;
+            }
+
+            List<Integer> userIds = new ArrayList<>();
+            String chatName = "";
+            try {
+                List<String> userIdsStr = Files.readAllLines(Paths.get(usersPath));
+
+                if (userIdsStr.get(0).startsWith("Group=")) {
+                    chatName = userIdsStr.get(0).substring(6);
+                }
+
+                for (int i = 1; i < userIdsStr.size(); i++) {
+                    userIds.add(Integer.parseInt(userIdsStr.get(i)));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ChatInformation chatInfo = new ChatInformation(chatId, chatName, userIds);
+            chatInfos.put(chatId, chatInfo);
+            return chatInfo;
+        }
+    }
+
+    public void removeHandler(int userId, int handlerId) {
+        synchronized (handlers) {
+            handlers.remove(userId);
+        }
         logger.log(String.format("Request handler %d stopped.", handlerId), 0);
     }
 

@@ -130,8 +130,19 @@ public class ClientRequestHandler extends Thread {
                             responses.notifyAll();
                         }
                         break;
+                    case GET_CHAT_INFO:
+                    case GET_USER_INFO:
+                        out.println(requestMessage);
+                        response = in.readLine();
+
+                        synchronized (responses) {
+                            responses.put(requestId, response);
+                            responses.notifyAll();
+                        }
+                        break;
                     case POLL:
                         out.println(requestMessage);
+                        // TODO
                         break;
                 }
             } catch (IOException | InterruptedException | NumberFormatException e) {

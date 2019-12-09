@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +21,10 @@ public class Client {
 
     private UserInformation user;
 
-    public ImageIcon defaultProfilePicture;
+    private ImageIcon defaultProfilePicture;
     private Map<Integer, ImageIcon> profilePictures = new HashMap<>();
     private Map<Integer, UserInformation> users = new HashMap<>();
+    private Map<Integer, ChatInformation> chats = new HashMap<>();
 
     public Client() {
         try {
@@ -38,7 +40,7 @@ public class Client {
 
         handler = new ClientRequestHandler();
     }
-    
+
     public UserInformation getUser() {
         return user;
     }
@@ -98,29 +100,11 @@ public class Client {
         );
         users.put(user.getId(), user);
 
-        if (profilePictures.containsKey(user.getId())) {    // profile picture is cached
-            user.setProfilePicture(profilePictures.get(user.getId()));
-        } else if (info[3].equals("1")) {   // user has uploaded a profile picture to the server
-            // get the profile picture from the server
-            String pathWithoutExtension = ROOT + "\\" + user.getId();
-            request = "GET_PROFILE_PICTURE#" + user.getId() + "#" + pathWithoutExtension;
+        setUserProfilePicture(user, info[3].equals("1"));
 
-            requestId = handler.addRequest(request);
-            response = handler.getResponse(requestId);
-
-            if (response.startsWith("ERROR")) { // if any error occurs, just use the default profile picture
-                user.setProfilePicture(defaultProfilePicture);
-            } else {    // otherwise create new profile picture
-                user.setProfilePicture(new ImageIcon(response));
-            }
-
-            // save information about a picture - it is already cached in ROOT folder, just save its path
-            saveProfilePictureInformation(user.getId(), response);
-
-        } else {    // no profile picture uploaded, use the default profile picture
-            user.setProfilePicture(defaultProfilePicture);
+        for (int i = 4; i < info.length; i++) {
+            getChatInfo(Integer.parseInt(info[i]));
         }
-        profilePictures.put(user.getId(), user.getProfilePicture());
 
         return "OK";
     }
@@ -177,39 +161,109 @@ public class Client {
         }
         profilePictures.put(user.getId(), user.getProfilePicture());
 
-        System.out.println("About to read data");
-
-        try {
-            readUserData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         return "OK";
     }
 
-    private void readUserData() throws IOException {
-//        System.out.println("Waiting for data...");
-//
-//        String basicInfo = in.readLine();
-//        System.out.println("Read: " + basicInfo);
-//        String info[] = basicInfo.split("#");
-//        int id = Integer.parseInt(info[1]);
-//        String firstName = info[2], lastName = info[3];
-//
-//        out.println("true");
-//
-//        String imageInfo = in.readLine();
-//        info = imageInfo.split("#");
-//        int length = Integer.parseInt(info[1]);
-//        String extension = info[2];
-//        String path = "C:\\Users\\uross\\Desktop\\" + id + extension;
-//
-//        System.out.println("Read: " + imageInfo);
-//
-//        if (length > 0) {
-//            System.out.println("Receiving profile picture...");
-//            FileHelper.receiveFile(socket, in, out, path, length);
-//        }
+    private void setUserProfilePicture(UserInformation user, boolean hasPictureOnServer) {
+        if (profilePictures.containsKey(user.getId())) {    // profile picture is cached
+            user.setProfilePicture(profilePictures.get(user.getId()));
+            return;
+        } else if (hasPictureOnServer) {   // user has uploaded a profile picture to the server
+            String request, response;
+            int requestId;
+
+            // get the profile picture from the server
+            String pathWithoutExtension = ROOT + "\\" + user.getId();
+            request = "GET_PROFILE_PICTURE#" + user.getId() + "#" + pathWithoutExtension;
+
+            requestId = handler.addRequest(request);
+            response = handler.getResponse(requestId);
+
+            if (response.startsWith("ERROR")) { // if any error occurs, just use the default profile picture
+                user.setProfilePicture(defaultProfilePicture);
+            } else {    // otherwise create new profile picture
+                user.setProfilePicture(new ImageIcon(response));
+            }
+
+            // save information about a picture - it is already cached in ROOT folder, just save its path
+            saveProfilePictureInformation(user.getId(), response);
+
+        } else {    // no profile picture uploaded, use the default profile picture
+            user.setProfilePicture(defaultProfilePicture);
+        }
+        profilePictures.put(user.getId(), user.getProfilePicture());
     }
+
+    private ChatInformation getChatInfo(int chatId) {
+        if (chats.containsKey(chatId)) {
+            return chats.get(chatId);
+        }
+
+        String request, response;
+        int requestId;
+
+        request = "GET_CHAT_INFO#" + chatId;
+        requestId = handler.addRequest(request);
+        response = handler.getResponse(requestId);
+
+        if (response.startsWith("ERROR")) {
+            return null;
+        }
+
+        String info[] = response.split("#");
+
+        boolean personalChat = info[1].equals("0");
+        String chatName = info[2];
+
+        List<Integer> friendIds = new ArrayList<>();
+
+        for (int i = 3; i < info.length; i++) {
+            int userId = Integer.parseInt(info[i]);
+            if (userId == user.getId()) {
+                continue;
+            }
+            friendIds.add(userId);
+
+            UserInformation userInfo = getUserInfo(userId);
+
+            if (personalChat) {
+                chatName = userInfo.getFirstName() + " " + userInfo.getLastName();
+            }
+        }
+
+        //
+        ChatInformation chatInfo = new ChatInformation(chatId, chatName, this.user, friendIds);
+        chats.put(chatId, chatInfo);
+        return chatInfo;
+    }
+
+    private UserInformation getUserInfo(int userId) {
+        if (users.containsKey(userId)) {
+            return users.get(userId);
+        }
+
+        String request, response;
+        int requestId;
+
+        request = "GET_USER_INFO#" + userId;
+        requestId = handler.addRequest(request);
+        response = handler.getResponse(requestId);
+
+        if (response.startsWith("ERROR")) {
+            return null;
+        }
+
+        String info[] = response.split("#");
+        UserInformation userInfo = new UserInformation(
+                Integer.parseInt(info[0]),
+                info[1],
+                info[2]
+        );
+
+        setUserProfilePicture(userInfo, info[3].equals("1"));
+
+        users.put(userId, userInfo);
+        return userInfo;
+    }
+
 }

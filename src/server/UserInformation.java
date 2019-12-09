@@ -1,10 +1,14 @@
 package server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserInformation {
 
     private int id;
     private String username, password, firstName, lastName;
     private String rootFolderPath, profilePicturePath;
+    private List<Integer> chatIds = new ArrayList<>();
 
     public UserInformation(
             int _id,
@@ -15,7 +19,7 @@ public class UserInformation {
         this(_username, _password, _firstName, _lastName);
         id = _id;
     }
-    
+
     public UserInformation(
             String _username,
             String _password,
@@ -26,7 +30,26 @@ public class UserInformation {
         firstName = _firstName;
         lastName = _lastName;
     }
-    
+
+    public void addChatId(int chatId) {
+        if (!chatIds.contains(chatId)) {
+            chatIds.add(chatId);
+        }
+    }
+
+    public List<Integer> getChatIds() {
+        return chatIds;
+    }
+
+    public String getSerializedChatIds() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int chatId : chatIds) {
+            sb.append("#" + chatId);
+        }
+        return sb.toString();
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -54,7 +77,7 @@ public class UserInformation {
     public void setRootFolderPath(String rootFolderPath) {
         this.rootFolderPath = rootFolderPath;
     }
-    
+
     public String getRootFolderPath() {
         return rootFolderPath;
     }
@@ -66,11 +89,11 @@ public class UserInformation {
     public void setProfilePicturePath(String profilePicturePath) {
         this.profilePicturePath = profilePicturePath;
     }
-    
+
     public boolean hasProfilePicture() {
         return profilePicturePath != null;
     }
-    
+
     public String serialize() {
         return id + "#" + username + "#" + password + "#" + firstName + "#" + lastName;
     }

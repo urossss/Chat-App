@@ -139,11 +139,15 @@ public class ServerRequestHandler extends Thread {
         }
     }
 
-    private void sendBasicData(int userId, boolean shouldSendProfilePicture) {
-        logger.log(String.format("sendBasicData: info userId=%d sendPicture=%b", userId, shouldSendProfilePicture), handlerId);
+    private void sendUserInfo(int userId, boolean shouldSendProfilePicture) {
+        logger.log(String.format("sendUserInfo: info userId=%d sendPicture=%b", userId, shouldSendProfilePicture), handlerId);
+
+        String serializedChatIds = "";
 
         UserInformation user = this.user;
-        if (userId != this.user.getId()) {
+        if (userId == this.user.getId()) {
+            serializedChatIds = user.getSerializedChatIds();
+        } else {
             user = server.getUserInformation(userId);
         }
 
@@ -153,20 +157,36 @@ public class ServerRequestHandler extends Thread {
         } else if (user.hasProfilePicture()) {
             profilePictureResponse = "1";       // user has a profile picture
         }
-        String basicInfo = user.getId() + "#" + user.getFirstName() + "#" + user.getLastName() + "#" + profilePictureResponse;
+        String basicInfo = user.getId() + "#" + user.getFirstName() + "#" + user.getLastName() + "#" + profilePictureResponse + serializedChatIds;
         out.println(basicInfo);
         out.flush();
 
-        logger.log(String.format("sendBasicData: sent userId=%d firstName=%s lastName=%s pictureResponse=%s",
+        logger.log(String.format("sendUserInfo: sent userId=%d firstName=%s lastName=%s pictureResponse=%s",
                 user.getId(), user.getFirstName(), user.getLastName(), profilePictureResponse), handlerId);
     }
 
-    private void sendBasicData(int userId) {
-        sendBasicData(userId, false);
+    private void sendUserInfo(int userId) {
+        sendUserInfo(userId, false);
     }
 
-    private void sendBasicData() {
-        sendBasicData(user.getId(), false);
+    private void sendUserInfo() {
+        sendUserInfo(user.getId(), false);
+    }
+
+    private void sendChatInfo(int chatId) {
+        logger.log(String.format("sendChatInfo chatId=%d", chatId), handlerId);
+
+        ChatInformation chatInfo = server.getChatInformation(chatId);
+        if (chatInfo == null) {
+            logger.log("sendChatInfo ERROR", handlerId);
+            out.println("ERROR");
+            return;
+        }
+
+        String toSend = chatInfo.serialize();
+        out.println(toSend);
+        
+        logger.log(String.format("sendChatInfo: sent %s", toSend), handlerId);
     }
 
     public void closeSocket() {
@@ -204,7 +224,7 @@ public class ServerRequestHandler extends Thread {
                             out.println(response);
                             out.flush();
                         } else {
-                            sendBasicData();
+                            sendUserInfo();
                         }
                         break;
                     case SIGNUP:
@@ -213,19 +233,22 @@ public class ServerRequestHandler extends Thread {
                             out.println(response);
                             out.flush();
                         } else {
-                            sendBasicData(user.getId(), response.equals("IMAGE"));
+                            sendUserInfo(user.getId(), response.equals("IMAGE"));
                         }
                         break;
                     case UPLOAD_IMAGE:
                         receiveProfilePicture(requestContent);
                         break;
-                    case GET_BASIC_INFO:
+                    case GET_USER_INFO:
                         userId = Integer.parseInt(requestContent);
-                        sendBasicData(userId);
+                        sendUserInfo(userId);
                         break;
                     case GET_PROFILE_PICTURE:
                         userId = Integer.parseInt(requestContent);
                         sendProfilePicture(userId);
+                        break;
+                    case GET_CHAT_INFO:
+                        sendChatInfo(Integer.parseInt(requestContent));
                         break;
                     case POLL:
                         //logger.log("Poll", handlerId);
