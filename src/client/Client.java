@@ -1,5 +1,6 @@
 package client;
 
+import client.gui.ClientFrame;
 import common.FileHelper;
 import common.RequestType;
 import java.io.IOException;
@@ -19,21 +20,25 @@ public class Client {
 
     private ClientRequestHandler handler;
 
+    private ClientFrame frame;
     private UserInformation user;
 
-    private ImageIcon defaultProfilePicture;
+    private ImageIcon defaultProfilePicture, defaultGroupPicture;
     private Map<Integer, ImageIcon> profilePictures = new HashMap<>();
     private Map<Integer, UserInformation> users = new HashMap<>();
     private Map<Integer, ChatInformation> chats = new HashMap<>();
 
-    public Client() {
+    public Client(ClientFrame _frame) {
+        frame = _frame;
+
         try {
             if (!Files.exists(Paths.get(ROOT))) {
                 initializeFileHierarchy();
             } else {
                 loadProfilePictures();
-                defaultProfilePicture = new ImageIcon(getClass().getResource("/client/gui/res/default.png"));
             }
+            defaultProfilePicture = new ImageIcon(getClass().getResource("/client/gui/res/defaultProfilePicture.png"));
+            defaultGroupPicture = new ImageIcon(getClass().getResource("/client/gui/res/defaultGroupPicture.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -214,6 +219,7 @@ public class Client {
 
         boolean personalChat = info[1].equals("0");
         String chatName = info[2];
+        ImageIcon chatImage = defaultGroupPicture;
 
         List<Integer> friendIds = new ArrayList<>();
 
@@ -228,12 +234,15 @@ public class Client {
 
             if (personalChat) {
                 chatName = userInfo.getFirstName() + " " + userInfo.getLastName();
+                chatImage = userInfo.getProfilePicture();
             }
         }
 
-        //
-        ChatInformation chatInfo = new ChatInformation(chatId, chatName, this.user, friendIds);
+        ChatInformation chatInfo = new ChatInformation(chatId, chatName, this.user, friendIds, chatImage);
         chats.put(chatId, chatInfo);
+
+        frame.getHomeScreen().addChatInfo(chatInfo);
+
         return chatInfo;
     }
 

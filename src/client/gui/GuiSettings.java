@@ -15,5 +15,7 @@ public class GuiSettings {
     public static final Color COLOR_BUBBLE_BACKGROUND_LEFT = new Color(240, 240, 240);
     public static final Color COLOR_BUBBLE_TEXT_RIGHT = Color.WHITE;
     public static final Color COLOR_BUBBLE_TEXT_LEFT = COLOR_TEXT_DARK;
+    public static final Color COLOR_CHAT_INFO_DEFAULT = COLOR_BACKGROUND;
+    public static final Color COLOR_CHAT_INFO_SELECTED = new Color(240, 240, 240);
     
 }

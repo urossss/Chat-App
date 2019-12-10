@@ -15,11 +15,13 @@ public class ClientFrame extends JFrame {
 
     private JPanel content;
 
-    private Client client = new Client();
+    private Client client = new Client(this);
+    
     private SignInScreen signInScreen;
     private SignUpScreen signUpScreen;
     private ProfileScreen profileScreen;
     private HomeScreen homeScreen;
+    private ChatScreen chatScreen;
 
     public ClientFrame() {
         super("Chat");
@@ -73,6 +75,9 @@ public class ClientFrame extends JFrame {
 
         profileScreen = new ProfileScreen(this);
         content.add(profileScreen, ScreenType.PROFILE.name());
+        
+        chatScreen = new ChatScreen(this);
+        content.add(chatScreen, ScreenType.CHAT.name());
 
         setActiveScreen(ScreenType.LOADING);
     }

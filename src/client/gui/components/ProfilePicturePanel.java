@@ -43,13 +43,17 @@ public class ProfilePicturePanel extends JPanel {
         });
     }
 
-    public ProfilePicturePanel(ImageIcon profilePicture, Dimension size, int _offset) {
+    public ProfilePicturePanel(Dimension size, int _offset) {
         this(_offset);
 
         setPreferredSize(size);
         setMaximumSize(size);
         setMinimumSize(size);
         setSize(size);
+    }
+
+    public ProfilePicturePanel(ImageIcon profilePicture, Dimension size, int _offset) {
+        this(size, _offset);
 
         setImage(profilePicture);
     }
