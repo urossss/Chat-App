@@ -16,7 +16,7 @@ public class ClientFrame extends JFrame {
     private JPanel content;
 
     private Client client = new Client(this);
-    
+
     private SignInScreen signInScreen;
     private SignUpScreen signUpScreen;
     private ProfileScreen profileScreen;
@@ -75,7 +75,7 @@ public class ClientFrame extends JFrame {
 
         profileScreen = new ProfileScreen(this);
         content.add(profileScreen, ScreenType.PROFILE.name());
-        
+
         chatScreen = new ChatScreen(this);
         content.add(chatScreen, ScreenType.CHAT.name());
 
@@ -101,6 +101,10 @@ public class ClientFrame extends JFrame {
 
     public HomeScreen getHomeScreen() {
         return homeScreen;
+    }
+
+    public ChatScreen getChatScreen() {
+        return chatScreen;
     }
 
     public static void main(String[] args) {

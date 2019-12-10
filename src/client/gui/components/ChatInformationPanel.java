@@ -5,7 +5,6 @@ import client.gui.ClientFrame;
 import client.gui.GuiSettings;
 import client.gui.screens.ScreenType;
 import java.awt.Dimension;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -16,19 +15,18 @@ public class ChatInformationPanel extends javax.swing.JPanel {
     /**
      * Creates new form ChatInformationPanel
      *
-     * @param chatInfo
+     * @param _chatInfo
      * @param _clientFrame
      */
-    public ChatInformationPanel(ChatInformation chatInfo, ClientFrame _clientFrame) {
+    public ChatInformationPanel(ChatInformation _chatInfo, ClientFrame _clientFrame) {
         initComponents();
 
         clientFrame = _clientFrame;
-        chatName = chatInfo.getChatName();
-        chatImage = chatInfo.getChatImage();
+        chatInfo = _chatInfo;
 
-        chatNameLabel.setText(chatName);
-        lastMessageLabel.setText("");   // FIX
-        ((ProfilePicturePanel) profilePicturePanel).setImage(chatImage);
+        chatNameLabel.setText(chatInfo.getChatName());
+        lastMessageLabel.setText("");   // FIX - add information about this inside ChatInformation
+        ((ProfilePicturePanel) profilePicturePanel).setImage(chatInfo.getChatImage());
     }
 
     /**
@@ -66,6 +64,10 @@ public class ChatInformationPanel extends javax.swing.JPanel {
         );
 
         infoPanel.setBackground(new java.awt.Color(255, 255, 255));
+        infoPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, GuiSettings.COLOR_TEXT_LIGHT));
+        infoPanel.setMaximumSize(new java.awt.Dimension(324, 55));
+        infoPanel.setMinimumSize(new java.awt.Dimension(324, 55));
+        infoPanel.setPreferredSize(new java.awt.Dimension(324, 55));
         infoPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 infoPanelMouseClicked(evt);
@@ -145,17 +147,17 @@ public class ChatInformationPanel extends javax.swing.JPanel {
 
     private void infoPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_infoPanelMouseClicked
         // TODO: open chat screen
+        clientFrame.getChatScreen().setChatInfo(chatInfo);
         clientFrame.setActiveScreen(ScreenType.CHAT);
     }//GEN-LAST:event_infoPanelMouseClicked
 
     private void profilePicturePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePicturePanelMouseClicked
-        clientFrame.getProfileScreen().setInfo(chatName, chatImage, ScreenType.HOME);
+        clientFrame.getProfileScreen().setInfo(chatInfo.getChatName(), chatInfo.getChatImage(), ScreenType.HOME);
         clientFrame.setActiveScreen(ScreenType.PROFILE);
     }//GEN-LAST:event_profilePicturePanelMouseClicked
 
     private ClientFrame clientFrame;
-    private String chatName;
-    private ImageIcon chatImage;
+    private ChatInformation chatInfo;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel chatNameLabel;

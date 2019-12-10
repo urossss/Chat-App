@@ -1,5 +1,6 @@
 package client.gui.screens;
 
+import client.ChatInformation;
 import client.gui.ClientFrame;
 import client.gui.GuiSettings;
 import client.gui.components.CustomLabel;
@@ -21,6 +22,13 @@ public class ChatScreen extends javax.swing.JPanel {
         
         clientFrame = _clientFrame;
     }
+    
+    public void setChatInfo(ChatInformation _chatInfo) {
+        chatInfo = _chatInfo;
+        
+        nameLabel.setText(chatInfo.getChatName());
+        ((ProfilePicturePanel) profilePicturePanel).setImage(chatInfo.getChatImage());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,7 +41,7 @@ public class ChatScreen extends javax.swing.JPanel {
 
         nameLabel = new javax.swing.JLabel();
         backLabel = new CustomLabel();
-        profilePicturePanel = new ProfilePicturePanel();
+        profilePicturePanel = new ProfilePicturePanel(1);
         messagesScrollPane = new javax.swing.JScrollPane();
         messagesPanel = new javax.swing.JPanel();
         jTextField1 = new CustomTextField("Type a message...");
@@ -46,7 +54,7 @@ public class ChatScreen extends javax.swing.JPanel {
         nameLabel.setBackground(new java.awt.Color(255, 255, 255));
         nameLabel.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
         nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        nameLabel.setText("Uros Stojiljkovic");
+        nameLabel.setText("Chat name here");
 
         backLabel.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
         backLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -57,6 +65,12 @@ public class ChatScreen extends javax.swing.JPanel {
         backLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 backLabelMouseClicked(evt);
+            }
+        });
+
+        profilePicturePanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                profilePicturePanelMouseClicked(evt);
             }
         });
 
@@ -81,7 +95,7 @@ public class ChatScreen extends javax.swing.JPanel {
         );
         messagesPanelLayout.setVerticalGroup(
             messagesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 441, Short.MAX_VALUE)
+            .addGap(0, 447, Short.MAX_VALUE)
         );
 
         messagesScrollPane.setViewportView(messagesPanel);
@@ -104,9 +118,9 @@ public class ChatScreen extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(messagesScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                .addGap(5, 5, 5)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(messagesScrollPane)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(backLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -124,10 +138,10 @@ public class ChatScreen extends javax.swing.JPanel {
                     .addComponent(backLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(messagesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                .addComponent(messagesScrollPane)
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
@@ -137,7 +151,13 @@ public class ChatScreen extends javax.swing.JPanel {
         clientFrame.setActiveScreen(ScreenType.HOME);
     }//GEN-LAST:event_backLabelMouseClicked
 
+    private void profilePicturePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePicturePanelMouseClicked
+        clientFrame.getProfileScreen().setInfo(chatInfo.getChatName(), chatInfo.getChatImage(), ScreenType.CHAT);
+        clientFrame.setActiveScreen(ScreenType.PROFILE);
+    }//GEN-LAST:event_profilePicturePanelMouseClicked
+
     private ClientFrame clientFrame;
+    private ChatInformation chatInfo;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel backLabel;
