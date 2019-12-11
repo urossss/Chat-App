@@ -5,7 +5,7 @@ import java.awt.Dimension;
 
 public class MyMessagePanel extends MessagePanel {
     
-    private static final int RIGHT = 20;
+    private static final int RIGHT = 5;
 
     public MyMessagePanel(String message) {
         super(message, GuiSettings.COLOR_BUBBLE_BACKGROUND_RIGHT, GuiSettings.COLOR_BUBBLE_TEXT_RIGHT);

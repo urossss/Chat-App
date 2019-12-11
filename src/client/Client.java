@@ -275,4 +275,34 @@ public class Client {
         return userInfo;
     }
 
+    public void getChatMessages(int chatId) {
+        ChatInformation chatInfo = chats.get(chatId);
+
+        String request, response;
+        int requestId;
+
+        request = "GET_CHAT_MESSAGES#" + chatId;
+        requestId = handler.addRequest(request);
+        response = handler.getResponse(requestId);
+
+        if (response.startsWith("ERROR")) {
+            return;
+        }
+
+        String messages = response;
+        while (!messages.isEmpty()) {
+            String info[] = messages.split("#", 5);
+            
+            int senderId = Integer.parseInt(info[0]);
+            int date = Integer.parseInt(info[1]);
+            String time = info[2];
+            int length = Integer.parseInt(info[3]);
+            String message = info[4].substring(0, length);
+            
+            messages = info[4].substring(length);
+            
+            chatInfo.addMessage(senderId, date, time, message);
+        }
+    }
+
 }

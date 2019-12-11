@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class ServerRequestHandler extends Thread {
 
@@ -185,8 +186,27 @@ public class ServerRequestHandler extends Thread {
 
         String toSend = chatInfo.serialize();
         out.println(toSend);
-        
+
         logger.log(String.format("sendChatInfo: sent %s", toSend), handlerId);
+    }
+
+    private void sendChatMessages(int chatId) {
+        logger.log(String.format("sendChatMessages chatId=%d", chatId), handlerId);
+
+        try {
+            List<String> messages = server.getChatMessages(chatId);
+
+            StringBuilder sb = new StringBuilder();
+            for (String message : messages) {
+                sb.append(message);
+            }
+
+            out.println(sb.toString());
+            logger.log(String.format("sendChatMessages sent messageCount=%d", messages.size()), handlerId);
+        } catch (ServerException e) {
+            out.println("ERROR");
+            logger.log("sendChatMessages ERROR", handlerId);
+        }
     }
 
     public void closeSocket() {
@@ -249,6 +269,9 @@ public class ServerRequestHandler extends Thread {
                         break;
                     case GET_CHAT_INFO:
                         sendChatInfo(Integer.parseInt(requestContent));
+                        break;
+                    case GET_CHAT_MESSAGES:
+                        sendChatMessages(Integer.parseInt(requestContent));
                         break;
                     case POLL:
                         //logger.log("Poll", handlerId);

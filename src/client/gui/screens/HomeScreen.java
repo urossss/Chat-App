@@ -4,10 +4,8 @@ import client.ChatInformation;
 import client.Client;
 import client.gui.ClientFrame;
 import client.gui.components.*;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ScrollPaneConstants;
 
@@ -63,9 +61,6 @@ public class HomeScreen extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         chatListScrollPane = new javax.swing.JScrollPane();
         chatListPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(400, 550));
@@ -115,20 +110,6 @@ public class HomeScreen extends javax.swing.JPanel {
 
         chatListScrollPane.setViewportView(chatListPanel);
 
-        jButton1.setText("left");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("right");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -144,28 +125,14 @@ public class HomeScreen extends javax.swing.JPanel {
                         .addComponent(profilePicturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(12, Short.MAX_VALUE))))
+                        .addContainerGap(214, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(profilePicturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton1)
-                                .addComponent(jButton2))))
+                    .addComponent(profilePicturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chatListScrollPane)
@@ -181,49 +148,6 @@ public class HomeScreen extends javax.swing.JPanel {
         clientFrame.setActiveScreen(ScreenType.PROFILE);
     }//GEN-LAST:event_profilePicturePanelMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        ChatBubblePanel bubble = new ChatBubblePanel("Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-//                + " Etiam aliquet a arcu sed volutpat. Ut consequat nulla dui, vitae maximus libero"
-//                + " ultrices bibendum. Mauris arcu nisl, viverra id condimentum vel, suscipit in nibh."
-//                + " Mauris arcu nisl, viverra id condimentum vel, suscipit in nibh.");
-//        chatsPanel.add(bubble);
-        //chatsPanel.add(new ChatBubblePanel(jTextField1.getText()));
-        //chatsPanel.add(new MyMessagePanel(jTextField1.getText()));
-//        chatsPanel.add(new MyMessagePanel("Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-//                + " Etiam aliquet a arcu sed volutpat. Ut consequat nulla dui, vitae maximus libero"
-//                + " ultrices bibendum. Mauris arcu nisl, viverra id condimentum vel, suscipit in nibh."
-//                + " Mauris arcu nisl, viverra id condimentum vel, suscipit in nibh."));
-        if (jTextField1.getText().isEmpty()) {
-            return;
-        }
-
-        chatListPanel.add(new FriendsMessagePanel(jTextField1.getText(), client.getProfilePicture()));
-        jTextField1.setText("");
-
-        chatListPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-
-        chatListPanel.revalidate();
-        chatListPanel.repaint();
-
-        chatListScrollPane.getVerticalScrollBar().setValue(chatListScrollPane.getVerticalScrollBar().getMaximum());
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (jTextField1.getText().isEmpty()) {
-            return;
-        }
-
-        chatListPanel.add(new MyMessagePanel(jTextField1.getText()));
-        jTextField1.setText("");
-
-        chatListPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-
-        chatListPanel.revalidate();
-        chatListPanel.repaint();
-
-        chatListScrollPane.getVerticalScrollBar().setValue(chatListScrollPane.getVerticalScrollBar().getMaximum());
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private ClientFrame clientFrame;
     private Client client;
 
@@ -232,10 +156,7 @@ public class HomeScreen extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel chatListPanel;
     private javax.swing.JScrollPane chatListScrollPane;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel profilePicturePanel;
     // End of variables declaration//GEN-END:variables
 }

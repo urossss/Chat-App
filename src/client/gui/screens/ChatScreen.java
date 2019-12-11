@@ -1,11 +1,19 @@
 package client.gui.screens;
 
 import client.ChatInformation;
+import client.Client;
 import client.gui.ClientFrame;
 import client.gui.GuiSettings;
 import client.gui.components.CustomLabel;
 import client.gui.components.CustomTextField;
+import client.gui.components.MyMessagePanel;
 import client.gui.components.ProfilePicturePanel;
+import java.awt.Dimension;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.ScrollPaneConstants;
 
 /**
  *
@@ -15,17 +23,34 @@ public class ChatScreen extends javax.swing.JPanel {
 
     /**
      * Creates new form ChatScreen
+     *
      * @param _clientFrame
+     * @param _client
      */
-    public ChatScreen(ClientFrame _clientFrame) {
+    public ChatScreen(ClientFrame _clientFrame, Client _client) {
         initComponents();
-        
+
         clientFrame = _clientFrame;
+        client = _client;
+
+        messagesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        messagesScrollPane.getVerticalScrollBar().setUnitIncrement(10);
     }
-    
+
     public void setChatInfo(ChatInformation _chatInfo) {
         chatInfo = _chatInfo;
-        
+
+        JPanel messagesPanel = chatInfo.getMessagesPanel();
+        if (messagesPanel == null) {    // messages aren't loaded yet, get them from server
+            messagesPanel = new JPanel();
+            messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
+            messagesPanel.setBackground(GuiSettings.COLOR_BACKGROUND);
+
+            chatInfo.setMessagesPanel(messagesPanel);
+            client.getChatMessages(chatInfo.getChatId());
+        }
+        messagesScrollPane.setViewportView(messagesPanel);
+
         nameLabel.setText(chatInfo.getChatName());
         ((ProfilePicturePanel) profilePicturePanel).setImage(chatInfo.getChatImage());
     }
@@ -43,7 +68,6 @@ public class ChatScreen extends javax.swing.JPanel {
         backLabel = new CustomLabel();
         profilePicturePanel = new ProfilePicturePanel(1);
         messagesScrollPane = new javax.swing.JScrollPane();
-        messagesPanel = new javax.swing.JPanel();
         jTextField1 = new CustomTextField("Type a message...");
         jButton1 = new javax.swing.JButton();
 
@@ -87,25 +111,17 @@ public class ChatScreen extends javax.swing.JPanel {
 
         messagesScrollPane.setBackground(new java.awt.Color(255, 255, 255));
 
-        javax.swing.GroupLayout messagesPanelLayout = new javax.swing.GroupLayout(messagesPanel);
-        messagesPanel.setLayout(messagesPanelLayout);
-        messagesPanelLayout.setHorizontalGroup(
-            messagesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 389, Short.MAX_VALUE)
-        );
-        messagesPanelLayout.setVerticalGroup(
-            messagesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 447, Short.MAX_VALUE)
-        );
-
-        messagesScrollPane.setViewportView(messagesPanel);
-
         jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTextField1.setForeground(GuiSettings.COLOR_TEXT_LIGHT);
         jTextField1.setText("Type a message...");
         jTextField1.setMargin(new java.awt.Insets(2, 10, 2, 2));
 
         jButton1.setText("Send");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -120,11 +136,11 @@ public class ChatScreen extends javax.swing.JPanel {
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
                                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(messagesScrollPane)))
+                            .addComponent(messagesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(backLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
+                        .addContainerGap()
+                        .addComponent(backLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(profilePicturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -133,10 +149,13 @@ public class ChatScreen extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(profilePicturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(backLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(profilePicturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(backLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(messagesScrollPane)
                 .addGap(5, 5, 5)
@@ -156,14 +175,33 @@ public class ChatScreen extends javax.swing.JPanel {
         clientFrame.setActiveScreen(ScreenType.PROFILE);
     }//GEN-LAST:event_profilePicturePanelMouseClicked
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TEST
+        if (jTextField1.getText().isEmpty()) {
+            return;
+        }
+        
+        chatInfo.addMessage(client.getUser().getId(), 20191212, "00:23", jTextField1.getText());
+
+//        chatListPanel.add(new MyMessagePanel(jTextField1.getText()));
+//        jTextField1.setText("");
+//
+//        chatListPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+//
+//        chatListPanel.revalidate();
+//        chatListPanel.repaint();
+//
+//        chatListScrollPane.getVerticalScrollBar().setValue(chatListScrollPane.getVerticalScrollBar().getMaximum());
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     private ClientFrame clientFrame;
+    private Client client;
     private ChatInformation chatInfo;
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel backLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JPanel messagesPanel;
     private javax.swing.JScrollPane messagesScrollPane;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JPanel profilePicturePanel;

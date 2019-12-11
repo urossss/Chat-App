@@ -44,7 +44,7 @@ public class Logger {
     private String getTime() {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY), minute = cal.get(Calendar.MINUTE), second = cal.get(Calendar.SECOND);
-        return String.format("[%2d:%02d:%02d]", hour, minute, second);
+        return String.format("[%02d:%02d:%02d]", hour, minute, second);
     }
 
     public void log(String log, int id) {

@@ -7,7 +7,6 @@ import client.gui.ClientFrame;
 import client.gui.GuiSettings;
 import client.gui.components.CustomButton;
 import client.gui.components.CustomLabel;
-import javax.swing.border.LineBorder;
 
 /**
  *

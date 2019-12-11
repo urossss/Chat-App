@@ -132,6 +132,7 @@ public class ClientRequestHandler extends Thread {
                         break;
                     case GET_CHAT_INFO:
                     case GET_USER_INFO:
+                    case GET_CHAT_MESSAGES:
                         out.println(requestMessage);
                         response = in.readLine();
 

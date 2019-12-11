@@ -215,6 +215,31 @@ public class Server extends Thread {
         }
     }
 
+    public List<String> getChatMessages(int chatId) throws ServerException {
+        logger.log(String.format("getChatMessages chatId=%d", chatId), 0);
+
+        if (!chatInfos.containsKey(chatId)) {
+            logger.log(String.format("getChatMessages ERROR=Invalid chat id"), 0);
+            throw new ServerException("Invalid chat id.");
+        }
+
+        String chatPath = CHATS + "\\" + chatId;
+        String messagesPath = chatPath + "_messages.txt";
+
+        try {
+            List<String> messages = Files.readAllLines(Paths.get(messagesPath));
+
+            logger.log(String.format("getChatMessages SUCCESS messageCount=%d", messages.size()), 0);
+
+            return messages;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        logger.log(String.format("getChatMessages ERROR=Couldn't read messages."), 0);
+        throw new ServerException("Internal server error: couldn't read messages.");
+    }
+
     public void removeHandler(int userId, int handlerId) {
         synchronized (handlers) {
             handlers.remove(userId);

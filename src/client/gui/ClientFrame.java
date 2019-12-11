@@ -76,7 +76,7 @@ public class ClientFrame extends JFrame {
         profileScreen = new ProfileScreen(this);
         content.add(profileScreen, ScreenType.PROFILE.name());
 
-        chatScreen = new ChatScreen(this);
+        chatScreen = new ChatScreen(this, client);
         content.add(chatScreen, ScreenType.CHAT.name());
 
         setActiveScreen(ScreenType.LOADING);
