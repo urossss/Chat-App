@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -303,6 +302,10 @@ public class Client {
 
             chatInfo.addMessage(senderId, date, time, message);
         }
+    }
+
+    public void sendMessage(String message, int chatId) {
+
     }
 
 }

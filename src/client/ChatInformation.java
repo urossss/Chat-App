@@ -7,7 +7,6 @@ import client.gui.components.MessagePanel;
 import client.gui.components.MyMessagePanel;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.List;
 import java.util.Map;
 import javax.swing.Box;
 import javax.swing.ImageIcon;

@@ -1,9 +1,9 @@
 package server;
 
+import common.DateTimeUtil;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Calendar;
 
 public class Logger {
 
@@ -35,21 +35,9 @@ public class Logger {
         logFile = false;
     }
 
-    private String getDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR), month = cal.get(Calendar.MONTH) + 1, day = cal.get(Calendar.DAY_OF_MONTH);
-        return String.format("%d.%02d.%02d.", year, month, day);
-    }
-
-    private String getTime() {
-        Calendar cal = Calendar.getInstance();
-        int hour = cal.get(Calendar.HOUR_OF_DAY), minute = cal.get(Calendar.MINUTE), second = cal.get(Calendar.SECOND);
-        return String.format("[%02d:%02d:%02d]", hour, minute, second);
-    }
-
     public void log(String log, int id) {
-        String dateAndTime = getTime();
-        log = dateAndTime + " " + log;
+        String time = DateTimeUtil.getTimeStringHMS();
+        log = time + " " + log;
 
         if (logConsole) {
             if (id > 0) {

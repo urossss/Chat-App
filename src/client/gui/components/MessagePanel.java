@@ -3,7 +3,6 @@ package client.gui.components;
 import client.gui.GuiSettings;
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Calendar;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;

@@ -1,5 +1,6 @@
 package server;
 
+import common.DateTimeUtil;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class Server extends Thread {
     private final Map<Integer, UserInformation> userInfos = new HashMap<>();
 
     public Server() {
-        CURRENT_LOGS = LOGS + "\\" + getDateAndTime();
+        CURRENT_LOGS = LOGS + "\\" + DateTimeUtil.getDateAndTimeString();
         SERVER_LOG = CURRENT_LOGS + "\\Server.log";
 
         if (!Files.isDirectory(Paths.get(ROOT))) {
@@ -60,13 +60,6 @@ public class Server extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private String getDateAndTime() {
-        Calendar cal = Calendar.getInstance();
-        int hour = cal.get(Calendar.HOUR_OF_DAY), minute = cal.get(Calendar.MINUTE), second = cal.get(Calendar.SECOND);
-        int year = cal.get(Calendar.YEAR), month = cal.get(Calendar.MONTH) + 1, day = cal.get(Calendar.DAY_OF_MONTH);
-        return String.format("%d%02d%02d_%2d-%02d-%02d", year, month, day, hour, minute, second);
     }
 
     private void initializeLogDirectory() {

@@ -58,7 +58,7 @@ public class HomeScreen extends javax.swing.JPanel {
     private void initComponents() {
 
         profilePicturePanel = new ProfilePicturePanel(1);
-        jLabel1 = new javax.swing.JLabel();
+        chatsLabel = new javax.swing.JLabel();
         chatListScrollPane = new javax.swing.JScrollPane();
         chatListPanel = new javax.swing.JPanel();
 
@@ -89,8 +89,8 @@ public class HomeScreen extends javax.swing.JPanel {
             .addGap(0, 50, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
-        jLabel1.setText("Chats");
+        chatsLabel.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        chatsLabel.setText("Chats");
 
         chatListScrollPane.setHorizontalScrollBar(null);
 
@@ -125,7 +125,7 @@ public class HomeScreen extends javax.swing.JPanel {
                         .addGap(8, 8, 8)
                         .addComponent(profilePicturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(13, 13, 13)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(chatsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(219, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -134,7 +134,7 @@ public class HomeScreen extends javax.swing.JPanel {
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(profilePicturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(chatsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addComponent(chatListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
@@ -157,7 +157,7 @@ public class HomeScreen extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel chatListPanel;
     private javax.swing.JScrollPane chatListScrollPane;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel chatsLabel;
     private javax.swing.JPanel profilePicturePanel;
     // End of variables declaration//GEN-END:variables
 }

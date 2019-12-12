@@ -8,5 +8,6 @@ public enum RequestType {
     GET_PROFILE_PICTURE,
     GET_CHAT_INFO,
     GET_CHAT_MESSAGES,
+    SEND_MESSAGE,
     POLL
 }
