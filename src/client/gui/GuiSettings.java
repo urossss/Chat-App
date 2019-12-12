@@ -18,4 +18,6 @@ public class GuiSettings {
     public static final Color COLOR_CHAT_INFO_DEFAULT = COLOR_BACKGROUND;
     public static final Color COLOR_CHAT_INFO_SELECTED = new Color(240, 240, 240);
     
+    // add fonts here
+    
 }

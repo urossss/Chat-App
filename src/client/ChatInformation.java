@@ -1,10 +1,14 @@
 package client;
 
+import client.gui.ClientFrame;
+import client.gui.GuiSettings;
 import client.gui.components.FriendsMessagePanel;
 import client.gui.components.MessagePanel;
 import client.gui.components.MyMessagePanel;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.List;
+import java.util.Map;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -18,22 +22,24 @@ public class ChatInformation {
 
     // chat memebers
     private UserInformation user;   // user that is signed in
-    private List<Integer> friends;  // other users in the chat
+    private Map<Integer, UserInformation> friends;  // other users in the chat
 
     // last message info
     private int lastDate, lastSender;
     private String lastTime, lastMessage;
 
-    // designated gui elements
+    // gui elements
+    private ClientFrame clientFrame;
     private ImageIcon chatImage;
     private JPanel messagesPanel;
 
-    public ChatInformation(int _chatId, String _chatName, UserInformation _user, List<Integer> _friends, ImageIcon _chatImage) {
+    public ChatInformation(int _chatId, String _chatName, UserInformation _user, Map<Integer, UserInformation> _friends, ImageIcon _chatImage, ClientFrame _clientFrame) {
         chatId = _chatId;
         chatName = _chatName;
         user = _user;
         friends = _friends;
         chatImage = _chatImage;
+        clientFrame = _clientFrame;
     }
 
     public void addMessage(int senderId, int date, String time, String message) {
@@ -43,8 +49,8 @@ public class ChatInformation {
         }
 
         if (date != lastDate) {
-            insertPadding();
             insertDateLabel(date);
+            insertPadding();
             insertPadding();
         } else if (senderId != lastSender) {
             insertPadding();
@@ -57,9 +63,10 @@ public class ChatInformation {
 
         MessagePanel messagePanel;
         if (senderId == user.getId()) {
-            messagePanel = new MyMessagePanel(message);
+            messagePanel = new MyMessagePanel(time, message);
         } else {
-            messagePanel = new FriendsMessagePanel(message, chatImage);
+            UserInformation sender = friends.get(senderId);
+            messagePanel = new FriendsMessagePanel(time, message, sender.getFirstName() + " " + sender.getLastName(), sender.getProfilePicture(), clientFrame);
         }
         messagesPanel.add(messagePanel);
         insertPadding();
@@ -69,7 +76,22 @@ public class ChatInformation {
         int year = date / 10000;
         int month = (date / 100) % 100;
         int day = date % 100;
-        messagesPanel.add(new JLabel(String.format("%d.%d.%d.", day, month, year)));
+
+        JPanel datePanel = new JPanel();
+        datePanel.setBackground(GuiSettings.COLOR_BACKGROUND);
+
+        Dimension size = new Dimension(371, 20);
+        datePanel.setPreferredSize(size);
+        datePanel.setMaximumSize(size);
+        datePanel.setMinimumSize(size);
+        datePanel.setSize(size);
+
+        JLabel dateLabel = new JLabel(String.format("%d.%d.%d.", day, month, year));
+        dateLabel.setFont(new Font("Sergoe UI", Font.PLAIN, 12));
+        dateLabel.setForeground(GuiSettings.COLOR_TEXT_DARK);
+        datePanel.add(dateLabel);
+
+        messagesPanel.add(datePanel);
     }
 
     private void insertPadding() {

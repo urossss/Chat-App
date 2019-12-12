@@ -51,10 +51,7 @@ public class CustomTextField extends JTextField {
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 if (getText().isEmpty()) {
-                    setText(defaultText);
-                    setCaretPosition(0);
-                    setForeground(defaultTextColor);
-                    typing = false;
+                    clear();
                 } else if (getText().equals(defaultText) && !typing) {
                     setCaretPosition(0);
                 }
@@ -68,5 +65,12 @@ public class CustomTextField extends JTextField {
 
     public boolean isInputValid() {
         return typing;
+    }
+
+    public void clear() {
+        setText(defaultText);
+        setCaretPosition(0);
+        setForeground(defaultTextColor);
+        typing = false;
     }
 }

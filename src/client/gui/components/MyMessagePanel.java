@@ -7,8 +7,8 @@ public class MyMessagePanel extends MessagePanel {
     
     private static final int RIGHT = 5;
 
-    public MyMessagePanel(String message) {
-        super(message, GuiSettings.COLOR_BUBBLE_BACKGROUND_RIGHT, GuiSettings.COLOR_BUBBLE_TEXT_RIGHT);
+    public MyMessagePanel(String time, String message) {
+        super(time, message, GuiSettings.COLOR_BUBBLE_BACKGROUND_RIGHT, GuiSettings.COLOR_BUBBLE_TEXT_RIGHT);
     }
 
     @Override

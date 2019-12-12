@@ -221,16 +221,16 @@ public class Client {
         String chatName = info[2];
         ImageIcon chatImage = defaultGroupPicture;
 
-        List<Integer> friendIds = new ArrayList<>();
+        Map<Integer, UserInformation> friends = new HashMap<>();
 
         for (int i = 3; i < info.length; i++) {
             int userId = Integer.parseInt(info[i]);
             if (userId == user.getId()) {
                 continue;
             }
-            friendIds.add(userId);
 
             UserInformation userInfo = getUserInfo(userId);
+            friends.put(userId, userInfo);
 
             if (personalChat) {
                 chatName = userInfo.getFirstName() + " " + userInfo.getLastName();
@@ -238,7 +238,7 @@ public class Client {
             }
         }
 
-        ChatInformation chatInfo = new ChatInformation(chatId, chatName, this.user, friendIds, chatImage);
+        ChatInformation chatInfo = new ChatInformation(chatId, chatName, this.user, friends, chatImage, frame);
         chats.put(chatId, chatInfo);
 
         frame.getHomeScreen().addChatInfo(chatInfo);
@@ -292,15 +292,15 @@ public class Client {
         String messages = response;
         while (!messages.isEmpty()) {
             String info[] = messages.split("#", 5);
-            
+
             int senderId = Integer.parseInt(info[0]);
             int date = Integer.parseInt(info[1]);
             String time = info[2];
             int length = Integer.parseInt(info[3]);
             String message = info[4].substring(0, length);
-            
+
             messages = info[4].substring(length);
-            
+
             chatInfo.addMessage(senderId, date, time, message);
         }
     }
