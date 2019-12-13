@@ -19,7 +19,7 @@ public class ClientWrapper {
         client.establishConnection();
 
         ServerPoller poller = new ServerPoller(this);
-        new Timer().schedule(poller, 1000, 1000);
+        new Timer().schedule(poller, 1000, 300);
     }
 
     public UserInformation getUser() {

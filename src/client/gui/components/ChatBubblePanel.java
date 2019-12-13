@@ -47,7 +47,7 @@ public class ChatBubblePanel extends JPanel {
         if (!sizeSet) {
             super.paintComponent(g);
 
-            System.out.println(textArea.getSize());
+            //System.out.println(textArea.getSize());
             sizeSet = true;
 
             textWidth = textArea.getWidth();

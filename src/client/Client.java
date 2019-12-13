@@ -325,9 +325,50 @@ public class Client {
         //ChatInformation chatInfo = chats.get(chatId);
         //chatInfo.addMessage(user.getId(), date, time, message);
     }
-    
+
     public void checkForUpdates() {
-        
+        String request, response;
+
+        request = "POLL#";
+        connection.sendMessage(request);
+        response = connection.receiveMessage();
+
+        while (!response.isEmpty()) {
+            String parts[] = response.split("#", 2);
+
+            int length = Integer.parseInt(parts[0]);
+            request = parts[1].substring(0, length);
+            response = parts[1].substring(length);
+
+            parts = request.split("#", 2);
+            String requestTypeName = parts[0];
+            String requestContent = parts[1];
+
+            RequestType requestType = RequestType.valueOf(requestTypeName);
+
+            switch (requestType) {
+                case NEW_MESSAGE:
+                    receiveNewMessage(requestContent);
+                    break;
+                case NEW_CHAT:
+                    throw new UnsupportedOperationException();
+                    //break;
+            }
+        }
+    }
+
+    private void receiveNewMessage(String serializedMessage) {
+        String info[] = serializedMessage.split("#", 6);
+
+        int chatId = Integer.parseInt(info[0]);
+        int senderId = Integer.parseInt(info[1]);
+        int date = Integer.parseInt(info[2]);
+        String time = info[3];
+        int length = Integer.parseInt(info[4]);
+        String message = info[5];
+
+        ChatInformation chatInfo = chats.get(chatId);
+        chatInfo.addMessage(senderId, date, time, message);
     }
 
 }

@@ -57,7 +57,7 @@ public class ServerRequestHandler extends Thread {
 
         String request;
         if (user.getChatIds().contains(chatId)) {
-            request = RequestType.NEW_MESSAGE.name() + "#" + serializedMessage;
+            request = RequestType.NEW_MESSAGE.name() + "#" + chatId + "#" + serializedMessage;
 
             logger.log("newMessageRequest requestType=NEW_MESSAGE", handlerId);
         } else {
@@ -244,15 +244,32 @@ public class ServerRequestHandler extends Thread {
         logger.log(String.format("receiveNewMessage chatId=%d serializedMessage=%s", chatId, serializedMessage), handlerId);
 
         server.processNewMessage(user.getId(), chatId, serializedMessage);
-        out.println("OK");
+        //out.println("OK");
 
         logger.log("receiveNewMessage SUCCESS", handlerId);
     }
 
     private void sendPendingRequests() {
-        logger.log(String.format("sendPendingRequests count=%d", pendingRequests.size()), handlerId);
+        StringBuilder sb = new StringBuilder();
+        synchronized (pendingRequests) {
+            if (pendingRequests.isEmpty()) {
+                out.println("");
+                return;
+            }
 
-        
+            logger.log(String.format("sendPendingRequests count=%d", pendingRequests.size()), handlerId);
+
+            for (String request : pendingRequests) {
+                sb.append(String.format("%d#%s", request.length(), request));
+            }
+
+            pendingRequests.clear();
+        }
+
+        String response = sb.toString();
+        out.println(response);
+
+        logger.log(String.format("sendPendingRequests sent response=%s", response), handlerId);
     }
 
     private void closeSocket() {

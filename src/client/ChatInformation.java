@@ -6,12 +6,14 @@ import client.gui.components.FriendsMessagePanel;
 import client.gui.components.MessagePanel;
 import client.gui.components.MyMessagePanel;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.util.Map;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class ChatInformation {
 
@@ -47,6 +49,16 @@ public class ChatInformation {
             return;
         }
 
+        if (EventQueue.isDispatchThread()) {
+            _addMessage(senderId, date, time, message);
+        } else {
+            SwingUtilities.invokeLater(() -> {
+                _addMessage(senderId, date, time, message);
+            });
+        }
+    }
+
+    public void _addMessage(int senderId, int date, String time, String message) {
         if (date != lastDate) {
             insertDateLabel(date);
             insertPadding();
