@@ -9,5 +9,7 @@ public enum RequestType {
     GET_CHAT_INFO,
     GET_CHAT_MESSAGES,
     SEND_MESSAGE,
-    POLL
+    POLL,
+    NEW_MESSAGE,
+    NEW_CHAT
 }

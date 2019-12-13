@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerRequestHandler extends Thread {
@@ -25,6 +26,8 @@ public class ServerRequestHandler extends Thread {
     private BufferedReader in;
 
     private UserInformation user;
+
+    private final List<String> pendingRequests = new ArrayList<>();
 
     public ServerRequestHandler(Server _server, Socket _socket) {
         server = _server;
@@ -47,6 +50,25 @@ public class ServerRequestHandler extends Thread {
 
     public int getHandlerId() {
         return handlerId;
+    }
+
+    public void newMessageRequest(int chatId, String serializedMessage) {
+        logger.log(String.format("newMessageRequest chatId=%d serializedMessage=%s", chatId, serializedMessage), handlerId);
+
+        String request;
+        if (user.getChatIds().contains(chatId)) {
+            request = RequestType.NEW_MESSAGE.name() + "#" + serializedMessage;
+
+            logger.log("newMessageRequest requestType=NEW_MESSAGE", handlerId);
+        } else {
+            request = RequestType.NEW_CHAT.name() + "#" + chatId;
+
+            logger.log("newMessageRequest requestType=NEW_CHAT", handlerId);
+        }
+
+        synchronized (pendingRequests) {
+            pendingRequests.add(request);
+        }
     }
 
     private String signIn(String request) {
@@ -187,6 +209,10 @@ public class ServerRequestHandler extends Thread {
         String toSend = chatInfo.serialize();
         out.println(toSend);
 
+        if (!user.getChatIds().contains(chatId)) {
+            user.getChatIds().add(chatId);
+        }
+
         logger.log(String.format("sendChatInfo: sent %s", toSend), handlerId);
     }
 
@@ -209,7 +235,27 @@ public class ServerRequestHandler extends Thread {
         }
     }
 
-    public void closeSocket() {
+    private void receiveNewMessage(String request) {
+        String info[] = request.split("#", 2);
+
+        int chatId = Integer.parseInt(info[0]);
+        String serializedMessage = info[1];
+
+        logger.log(String.format("receiveNewMessage chatId=%d serializedMessage=%s", chatId, serializedMessage), handlerId);
+
+        server.processNewMessage(user.getId(), chatId, serializedMessage);
+        out.println("OK");
+
+        logger.log("receiveNewMessage SUCCESS", handlerId);
+    }
+
+    private void sendPendingRequests() {
+        logger.log(String.format("sendPendingRequests count=%d", pendingRequests.size()), handlerId);
+
+        
+    }
+
+    private void closeSocket() {
         try {
             in.close();
             out.close();
@@ -273,8 +319,11 @@ public class ServerRequestHandler extends Thread {
                     case GET_CHAT_MESSAGES:
                         sendChatMessages(Integer.parseInt(requestContent));
                         break;
+                    case SEND_MESSAGE:
+                        receiveNewMessage(requestContent);
+                        break;
                     case POLL:
-                        //logger.log("Poll", handlerId);
+                        sendPendingRequests();
                         break;
                     default:
                         logger.log(String.format("Unknown operation: %s", request), handlerId);

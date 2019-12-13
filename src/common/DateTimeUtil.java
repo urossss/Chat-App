@@ -20,7 +20,7 @@ public class DateTimeUtil {
     public static String getTimeStringHM() {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY), minute = cal.get(Calendar.MINUTE);
-        return String.format("[%02d:%02d]", hour, minute);
+        return String.format("%02d:%02d", hour, minute);
     }
 
     public static String getTimeStringHMS() {

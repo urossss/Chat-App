@@ -2,7 +2,7 @@ package client.gui.screens;
 
 import client.gui.components.CustomTextField;
 import client.gui.components.CustomPasswordField;
-import client.Client;
+import client.ClientWrapper;
 import client.gui.ClientFrame;
 import client.gui.GuiSettings;
 import client.gui.components.CustomButton;
@@ -18,15 +18,15 @@ public class SignInScreen extends javax.swing.JPanel {
      * Creates new form SignInScreen
      *
      * @param _clientFrame
-     * @param _client
+     * @param _clientWrapper
      */
-    public SignInScreen(ClientFrame _clientFrame, Client _client) {
+    public SignInScreen(ClientFrame _clientFrame, ClientWrapper _clientWrapper) {
         initComponents();
 
         setBackground(GuiSettings.COLOR_BACKGROUND);
 
         clientFrame = _clientFrame;
-        client = _client;
+        clientWrapper = _clientWrapper;
 
         requiredUsernameLabel.setForeground(GuiSettings.COLOR_BACKGROUND);
         requiredPasswordLabel.setForeground(GuiSettings.COLOR_BACKGROUND);
@@ -177,7 +177,7 @@ public class SignInScreen extends javax.swing.JPanel {
         }
 
         if (inputValid) {
-            String response = client.signIn(usernameField.getText(), String.valueOf(passwordField.getPassword()));
+            String response = clientWrapper.signIn(usernameField.getText(), String.valueOf(passwordField.getPassword()));
             if (response.equals("OK")) {
                 clientFrame.getHomeScreen().setIcon();
                 clientFrame.setActiveScreen(ScreenType.HOME);
@@ -190,7 +190,7 @@ public class SignInScreen extends javax.swing.JPanel {
     }//GEN-LAST:event_signinButtonActionPerformed
 
     private ClientFrame clientFrame;
-    private Client client;
+    private ClientWrapper clientWrapper;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel errorLabel;

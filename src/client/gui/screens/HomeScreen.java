@@ -1,7 +1,7 @@
 package client.gui.screens;
 
 import client.ChatInformation;
-import client.Client;
+import client.ClientWrapper;
 import client.gui.ClientFrame;
 import client.gui.components.*;
 import java.util.HashMap;
@@ -19,13 +19,13 @@ public class HomeScreen extends javax.swing.JPanel {
      * Creates new form HomeScreen
      *
      * @param _clientFrame
-     * @param _client
+     * @param _clientWrapper
      */
-    public HomeScreen(ClientFrame _clientFrame, Client _client) {
+    public HomeScreen(ClientFrame _clientFrame, ClientWrapper _clientWrapper) {
         initComponents();
 
         clientFrame = _clientFrame;
-        client = _client;
+        clientWrapper = _clientWrapper;
 
         chatListPanel.setLayout(new BoxLayout(chatListPanel, BoxLayout.Y_AXIS));
 
@@ -38,7 +38,7 @@ public class HomeScreen extends javax.swing.JPanel {
 
     public void setIcon() {
         ProfilePicturePanel ppp = (ProfilePicturePanel) profilePicturePanel;
-        ppp.setImage(client.getProfilePicture());
+        ppp.setImage(clientWrapper.getUser().getProfilePicture());
         ppp.repaint();
     }
 
@@ -143,14 +143,14 @@ public class HomeScreen extends javax.swing.JPanel {
 
     private void profilePicturePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePicturePanelMouseClicked
         clientFrame.getProfileScreen().setInfo(
-                client.getUser().getFirstName() + " " + client.getUser().getLastName(),
-                client.getUser().getProfilePicture(),
+                clientWrapper.getUser().getFirstName() + " " + clientWrapper.getUser().getLastName(),
+                clientWrapper.getUser().getProfilePicture(),
                 ScreenType.HOME);
         clientFrame.setActiveScreen(ScreenType.PROFILE);
     }//GEN-LAST:event_profilePicturePanelMouseClicked
 
     private ClientFrame clientFrame;
-    private Client client;
+    private ClientWrapper clientWrapper;
 
     private Map<Integer, ChatInformationPanel> chatInfoPanels = new HashMap<>();
 

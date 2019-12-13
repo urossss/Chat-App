@@ -1,17 +1,13 @@
 package client.gui.screens;
 
 import client.ChatInformation;
-import client.Client;
+import client.ClientWrapper;
 import client.gui.ClientFrame;
 import client.gui.GuiSettings;
 import client.gui.components.CustomLabel;
 import client.gui.components.CustomTextField;
-import client.gui.components.MyMessagePanel;
 import client.gui.components.ProfilePicturePanel;
-import java.awt.Dimension;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.ScrollPaneConstants;
 
@@ -25,13 +21,13 @@ public class ChatScreen extends javax.swing.JPanel {
      * Creates new form ChatScreen
      *
      * @param _clientFrame
-     * @param _client
+     * @param _clientWrapper
      */
-    public ChatScreen(ClientFrame _clientFrame, Client _client) {
+    public ChatScreen(ClientFrame _clientFrame, ClientWrapper _clientWrapper) {
         initComponents();
 
         clientFrame = _clientFrame;
-        client = _client;
+        clientWrapper = _clientWrapper;
 
         messagesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         messagesScrollPane.getVerticalScrollBar().setUnitIncrement(10);
@@ -47,7 +43,7 @@ public class ChatScreen extends javax.swing.JPanel {
             messagesPanel.setBackground(GuiSettings.COLOR_BACKGROUND);
 
             chatInfo.setMessagesPanel(messagesPanel);
-            client.getChatMessages(chatInfo.getChatId());
+            clientWrapper.getChatMessages(chatInfo.getChatId());
         }
         messagesScrollPane.setViewportView(messagesPanel);
 
@@ -179,20 +175,21 @@ public class ChatScreen extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TEST
-        
+
         CustomTextField customMessageField = (CustomTextField) messageField;
         if (!customMessageField.isInputValid()) {
             return;
         }
-        
+
         String message = customMessageField.getText();
         customMessageField.clear();
-        
-        chatInfo.addMessage(client.getUser().getId(), 20191212, "00:23", message);
+
+        //chatInfo.addMessage(client.getUser().getId(), 20191212, "00:23", message);
+        clientWrapper.sendMessage(message, chatInfo.getChatId());
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private ClientFrame clientFrame;
-    private Client client;
+    private ClientWrapper clientWrapper;
     private ChatInformation chatInfo;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

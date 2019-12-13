@@ -233,6 +233,40 @@ public class Server extends Thread {
         throw new ServerException("Internal server error: couldn't read messages.");
     }
 
+    public void processNewMessage(int senderId, int chatId, String serializedMessage) {
+        logger.log(String.format("processNewMessage senderId=%d chatId=%d message=%s", senderId, chatId, serializedMessage), 0);
+
+        ChatInformation chatInfo = chatInfos.get(chatId);
+
+        synchronized (chatInfo) {
+            String chatPath = CHATS + "\\" + chatId;
+            String messagesPath = chatPath + "_messages.txt";
+
+            try {
+                Files.write(Paths.get(messagesPath), (serializedMessage + "\n").getBytes(), StandardOpenOption.APPEND);
+                
+                logger.log("processNewMessage message saved", 0);
+            } catch (IOException e) {
+                logger.log(String.format("processNewMessage ERROR=%s", e.getMessage()), 0);
+                e.printStackTrace();
+            }
+
+            List<Integer> userIds = chatInfo.getUsers();
+            for (int userId : userIds) {
+                logger.log(String.format("processNewMessage sending userId=%d", userId), 0);
+                
+                ServerRequestHandler userHandler = handlers.get(userId);
+                if (userHandler == null) {  // user is not online
+                    // TODO: save info about chat that has unread messages (along with last message that needs to be added too)
+                    continue;
+                } else {
+                    userHandler.newMessageRequest(chatId, serializedMessage);
+                }
+            }
+        }
+        logger.log("processNewMessage done", 0);
+    }
+
     public void removeHandler(int userId, int handlerId) {
         synchronized (handlers) {
             handlers.remove(userId);

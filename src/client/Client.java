@@ -1,6 +1,7 @@
 package client;
 
 import client.gui.ClientFrame;
+import common.DateTimeUtil;
 import common.FileHelper;
 import common.RequestType;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class Client {
     private final String ROOT = System.getProperty("user.dir") + "\\tmp";
     private final String PICTURES_INFO = ROOT + "\\profilePictureInformation.txt";
 
-    private ClientRequestHandler handler;
+    private Connection connection;
 
     private ClientFrame frame;
     private UserInformation user;
@@ -42,15 +43,11 @@ public class Client {
             e.printStackTrace();
         }
 
-        handler = new ClientRequestHandler();
+        connection = new Connection();
     }
 
     public UserInformation getUser() {
         return user;
-    }
-
-    public ImageIcon getProfilePicture() {
-        return user.getProfilePicture();
     }
 
     private void initializeFileHierarchy() throws IOException {
@@ -71,8 +68,7 @@ public class Client {
     }
 
     public void establishConnection() throws IOException {
-        handler.establishConnection();
-        handler.start();
+        connection.establishConnection();
     }
 
     private void saveProfilePictureInformation(int id, String path) {
@@ -87,8 +83,8 @@ public class Client {
         // send username and password
         String request = RequestType.SIGNIN.name() + "#" + username + "#" + password;
 
-        int requestId = handler.addRequest(request);
-        String response = handler.getResponse(requestId);
+        connection.sendMessage(request);
+        String response = connection.receiveMessage();
 
         // server returns error if username or password is incorrect
         if (response.startsWith("ERROR")) {
@@ -120,10 +116,10 @@ public class Client {
         }
 
         // try to create a new account
-        String request = "SIGNUP#" + username + "#" + password + "#" + firstName + "#" + lastName + "#" + pictureLength;
+        String request = RequestType.SIGNUP.name() + "#" + username + "#" + password + "#" + firstName + "#" + lastName + "#" + pictureLength;
 
-        int requestId = handler.addRequest(request);
-        String response = handler.getResponse(requestId);
+        connection.sendMessage(request);
+        String response = connection.receiveMessage();
 
         // server returns error if username already exists
         if (response.startsWith("ERROR")) {
@@ -143,8 +139,9 @@ public class Client {
             System.out.println("Uploading the picture...");
 
             // upload profile picture to the server
-            request = "UPLOAD_IMAGE#" + profilePicturePath;
-            handler.addRequest(request);
+            //request = "UPLOAD_IMAGE#" + profilePicturePath;
+            //handler.sendMessage(request);
+            connection.sendImage(profilePicturePath);
 
             System.out.println("Uploaded the picture.");
 
@@ -174,14 +171,23 @@ public class Client {
             return;
         } else if (hasPictureOnServer) {   // user has uploaded a profile picture to the server
             String request, response;
-            int requestId;
 
             // get the profile picture from the server
             String pathWithoutExtension = ROOT + "\\" + user.getId();
-            request = "GET_PROFILE_PICTURE#" + user.getId() + "#" + pathWithoutExtension;
 
-            requestId = handler.addRequest(request);
-            response = handler.getResponse(requestId);
+            request = RequestType.GET_PROFILE_PICTURE.name() + "#" + user.getId();
+            connection.sendMessage(request);
+            response = connection.receiveMessage();
+
+            if (!response.startsWith("ERROR")) {
+                String[] info = response.split("#");
+                int length = Integer.parseInt(info[1]);
+                String extension = info[2];
+                String profilePicturePath = pathWithoutExtension + extension;
+
+                connection.sendMessage("OK");
+                response = connection.receiveImage(profilePicturePath, length);
+            }
 
             if (response.startsWith("ERROR")) { // if any error occurs, just use the default profile picture
                 user.setProfilePicture(defaultProfilePicture);
@@ -204,11 +210,10 @@ public class Client {
         }
 
         String request, response;
-        int requestId;
 
-        request = "GET_CHAT_INFO#" + chatId;
-        requestId = handler.addRequest(request);
-        response = handler.getResponse(requestId);
+        request = RequestType.GET_CHAT_INFO.name() + "#" + chatId;
+        connection.sendMessage(request);
+        response = connection.receiveMessage();
 
         if (response.startsWith("ERROR")) {
             return null;
@@ -251,11 +256,10 @@ public class Client {
         }
 
         String request, response;
-        int requestId;
 
-        request = "GET_USER_INFO#" + userId;
-        requestId = handler.addRequest(request);
-        response = handler.getResponse(requestId);
+        request = RequestType.GET_USER_INFO.name() + "#" + userId;
+        connection.sendMessage(request);
+        response = connection.receiveMessage();
 
         if (response.startsWith("ERROR")) {
             return null;
@@ -278,11 +282,10 @@ public class Client {
         ChatInformation chatInfo = chats.get(chatId);
 
         String request, response;
-        int requestId;
 
-        request = "GET_CHAT_MESSAGES#" + chatId;
-        requestId = handler.addRequest(request);
-        response = handler.getResponse(requestId);
+        request = RequestType.GET_CHAT_MESSAGES.name() + "#" + chatId;
+        connection.sendMessage(request);
+        response = connection.receiveMessage();
 
         if (response.startsWith("ERROR")) {
             return;
@@ -305,7 +308,26 @@ public class Client {
     }
 
     public void sendMessage(String message, int chatId) {
+        String request, response;
 
+        int date = DateTimeUtil.getDateNumber();
+        String time = DateTimeUtil.getTimeStringHM();
+        String serializedMessage = user.getId() + "#" + date + "#" + time + "#" + message.length() + "#" + message;
+
+        request = RequestType.SEND_MESSAGE.name() + "#" + chatId + "#" + serializedMessage;
+        connection.sendMessage(request);
+//        response = handler.receiveMessage(requestId);
+//
+//        if (response.startsWith("ERROR")) {
+//            return;
+//        }
+
+        //ChatInformation chatInfo = chats.get(chatId);
+        //chatInfo.addMessage(user.getId(), date, time, message);
+    }
+    
+    public void checkForUpdates() {
+        
     }
 
 }

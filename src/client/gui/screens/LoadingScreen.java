@@ -1,8 +1,5 @@
 package client.gui.screens;
 
-import client.Client;
-import client.gui.ClientFrame;
-
 /**
  *
  * @author uross
@@ -11,15 +8,9 @@ public class LoadingScreen extends javax.swing.JPanel {
 
     /**
      * Creates new form LogIn
-     *
-     * @param _clientFrame
-     * @param _client
      */
-    public LoadingScreen(ClientFrame _clientFrame, Client _client) {
+    public LoadingScreen() {
         initComponents();
-
-        clientFrame = _clientFrame;
-        client = _client;
     }
 
     /**
@@ -71,9 +62,6 @@ public class LoadingScreen extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private ClientFrame clientFrame;
-    private Client client;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

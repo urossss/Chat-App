@@ -1,6 +1,7 @@
 package client.gui;
 
 import client.Client;
+import client.ClientWrapper;
 import client.gui.screens.*;
 import java.awt.CardLayout;
 import java.awt.Toolkit;
@@ -15,7 +16,7 @@ public class ClientFrame extends JFrame {
 
     private JPanel content;
 
-    private Client client = new Client(this);
+    private ClientWrapper clientWrapper = new ClientWrapper(this);
 
     private SignInScreen signInScreen;
     private SignUpScreen signUpScreen;
@@ -48,7 +49,7 @@ public class ClientFrame extends JFrame {
 
     public void establishConnection() {
         try {
-            client.establishConnection();
+            clientWrapper.establishConnection();
             setActiveScreen(ScreenType.SIGNIN);
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,22 +62,22 @@ public class ClientFrame extends JFrame {
         content.setLayout(new CardLayout());
         add(content);
 
-        signInScreen = new SignInScreen(this, client);
+        signInScreen = new SignInScreen(this, clientWrapper);
         content.add(signInScreen, ScreenType.SIGNIN.name());
 
-        signUpScreen = new SignUpScreen(this, client);
+        signUpScreen = new SignUpScreen(this, clientWrapper);
         content.add(signUpScreen, ScreenType.SIGNUP.name());
 
-        content.add(new LoadingScreen(this, client), ScreenType.LOADING.name());
+        content.add(new LoadingScreen(), ScreenType.LOADING.name());
         content.add(new LoadingErrorScreen(this), ScreenType.LOADING_ERROR.name());
 
-        homeScreen = new HomeScreen(this, client);
+        homeScreen = new HomeScreen(this, clientWrapper);
         content.add(homeScreen, ScreenType.HOME.name());
 
         profileScreen = new ProfileScreen(this);
         content.add(profileScreen, ScreenType.PROFILE.name());
 
-        chatScreen = new ChatScreen(this, client);
+        chatScreen = new ChatScreen(this, clientWrapper);
         content.add(chatScreen, ScreenType.CHAT.name());
 
         setActiveScreen(ScreenType.LOADING);

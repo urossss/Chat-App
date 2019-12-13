@@ -2,7 +2,7 @@ package client.gui.screens;
 
 import client.gui.components.CustomTextField;
 import client.gui.components.CustomPasswordField;
-import client.Client;
+import client.ClientWrapper;
 import client.gui.ClientFrame;
 import client.gui.GuiSettings;
 import client.gui.components.CustomButton;
@@ -10,7 +10,6 @@ import client.gui.components.CustomLabel;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.JFileChooser;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -23,13 +22,13 @@ public class SignUpScreen extends javax.swing.JPanel {
      * Creates new form LogIn
      *
      * @param _clientFrame
-     * @param _client
+     * @param _clientWrapper
      */
-    public SignUpScreen(ClientFrame _clientFrame, Client _client) {
+    public SignUpScreen(ClientFrame _clientFrame, ClientWrapper _clientWrapper) {
         initComponents();
 
         clientFrame = _clientFrame;
-        client = _client;
+        clientWrapper = _clientWrapper;
 
         requiredFirstLabel.setForeground(GuiSettings.COLOR_BACKGROUND);
         requiredLastLabel.setForeground(GuiSettings.COLOR_BACKGROUND);
@@ -278,7 +277,7 @@ public class SignUpScreen extends javax.swing.JPanel {
         }
 
         if (inputValid) {
-            String response = client.signUp(
+            String response = clientWrapper.signUp(
                     usernameField.getText(),
                     String.valueOf(passwordField.getPassword()),
                     firstNameField.getText(),
@@ -298,7 +297,7 @@ public class SignUpScreen extends javax.swing.JPanel {
     }//GEN-LAST:event_signupButtonActionPerformed
 
     private ClientFrame clientFrame;
-    private Client client;
+    private ClientWrapper clientWrapper;
 
     private String profilePicturePath = "";
 

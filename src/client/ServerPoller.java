@@ -4,15 +4,15 @@ import java.util.TimerTask;
 
 public class ServerPoller extends TimerTask {
 
-    private ClientRequestHandler handler;
+    private ClientWrapper client;
 
-    public ServerPoller(ClientRequestHandler _handler) {
-        handler = _handler;
+    public ServerPoller(ClientWrapper _client) {
+        client = _client;
     }
 
     @Override
     public void run() {
-        handler.addRequest("POLL#");
+        client.checkForUpdates();
     }
 
 }
